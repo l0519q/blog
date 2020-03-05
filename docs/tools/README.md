@@ -990,7 +990,7 @@ git push \<name> \<branch>
 
 拉取：git fetch \<name>
 
-合并：get merge \<branch>
+合并：git merge \<branch>
 
 拉取加合并：git pull \<name> \<branch>
 

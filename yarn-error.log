@@ -1,0 +1,45 @@
+Arguments: 
+  D:\Program Files\nodejs\node.exe C:\Users\li\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add -D @vuepress/plugin-back-to-top
+
+PATH: 
+  C:\WINDOWS;C:\WINDOWS\system32;C:\WINDOWS\System32;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;D:\Program Files\nodejs\;C:\Users\li\AppData\Local\Microsoft\WindowsApps;C:\Users\li\AppData\Roaming\npm
+
+Yarn version: 
+  1.22.0
+
+Node version: 
+  12.16.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'D:\Documents\vuepress-blog\node_modules\@vuepress\core\.temp\palette.styl'
+
+npm manifest: 
+  {
+    "name": "mynotes",
+    "version": "1.0.0",
+    "description": "我的个人网站",
+    "main": "index.js",
+    "scripts": {
+      "docs:dev": "vuepress dev docs",
+      "docs:build": "vuepress build docs",
+      "deploy": "start deploy.sh"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "vuepress": "^1.3.1"
+    },
+    "dependencies": {
+      "moment": "^2.24.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

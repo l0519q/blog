@@ -431,7 +431,6 @@ Content-Type: text/html; charset=iso-8859-1
 ### 5. 如何创建块级格式上下文(block formatting context)，BFC 有什么用
 
 * 创建规则：
-  * 根元素
   * 浮动元素（`float` 不取值为 `none`）
   * 绝对定位元素（`position` 取值为 `absolute` 或 `fixed`）
   * `display` 取值为 `inline-block`、`table-cell`、`table-caption`、`flex`、`inline-flex` 之一的元素
@@ -455,7 +454,7 @@ Content-Type: text/html; charset=iso-8859-1
 ### 7. 为什么要初始化 CSS 样式？
 
 * 因为浏览器的兼容问题，不同浏览器对有些标签的默认值是不同的，如果没对 `CSS` 初始化往往会出现浏览器之间的页面显示差异。
-* 当然，初始化样式会对 `SEO` 有一定的影响，但鱼和熊掌不可兼得，但力求影响最小的情况下初始化  
+* 当然，初始化样式会对 `SEO` 有一定的影响，但鱼和熊掌不可兼得，在力求影响最小的情况下初始化  
 
 ### 8. display 有哪些值
 
@@ -471,11 +470,11 @@ Content-Type: text/html; charset=iso-8859-1
 
 * 优先级就近原则，同权重情况下样式定义最近者为准
 * 载入样式以最后载入的定位为准
-* 优先级为：`!important > id > class > tag`  
+* 优先级为：`!important > 行间样式 > id > class｜属性｜伪类 > tag｜伪元素 > *`  
 
 ### 10. 谈谈浮动和清除浮动
 
-浮动的框可以向左或向右移动，直到它的外边缘碰到包含框或另一个浮云框的边框为止。由于浮动框不在文档的普通流中，所以文档的普通流的块框表现得就像浮动框不存在一样。浮动的块框会漂浮在文档普通流的块框上。  
+浮动的框可以向左或向右移动，直到它的外边缘碰到包含框或另一个浮动框的边框为止。由于浮动框不在文档的普通流中，所以文档的普通流的块框表现得就像浮动框不存在一样。浮动的块框会漂浮在文档普通流的块框上。  
 
 ### 11. position 有哪些值
 
@@ -484,6 +483,7 @@ Content-Type: text/html; charset=iso-8859-1
 * `relative`：生成相对定位的元素，相对于其正常位置进行定位
 * `static`：默认值。没有定位，元素出现在正常的流中
 * `inherit`：规定从父元素继承 `position` 属性的值  
+* `sticky`  是一个新的 CSS3 属性，它的表现类似 `relative` 和 `fixed` 的合体，在目标区域在屏幕中可见时，它的行为就像 `relative`，而当页面滚动超出目标区域时，它的表现就像 `fixed`，它会固定在目标位置。例如淘宝的侧边栏。
 
 ### 12. display: inline-block 什么时候不会显示间隙？
 
@@ -542,7 +542,7 @@ Content-Type: text/html; charset=iso-8859-1
 * 优点可以加密，减少了 `HTTP` 请求
 * 缺点是需要消耗 `CPU` 进行编解码  
 
-### 20. 几种常见的 CSS 布局
+### 20. 几种常见的 CSS 三列布局
 
 **流体布局**
 
@@ -668,6 +668,40 @@ Content-Type: text/html; charset=iso-8859-1
 
 <br>
 
+**flex布局**
+
+``` html
+<div class="wrapper">
+    <div class="left">left</div>
+    <div class="center">center</div>
+    <div class="right">right</div>
+</div>
+```
+
+``` css
+.wrapper {
+	display: flex;
+	width: 100%;
+}
+.left {
+	width: 200px;
+    height: 200px;
+	background: red;
+}
+.center {
+	flex: 1;
+    height: 200px;
+	background: orange;
+}
+.right {
+	width: 200px;
+    height: 200px;
+	background: green;
+}
+```
+
+<br>
+
 ### 21. 什么是外边距重叠？重叠的结果是什么？
 
 > 外边距重叠就是 margin-collapse
@@ -690,7 +724,7 @@ Content-Type: text/html; charset=iso-8859-1
 * 垂直方向：`line-height`
 * 水平方向：`letter-spacing`  
 
-### 24. 如何垂直居中一个浮动元素？	
+### 24. 如何水平垂直居中一个浮动元素？	
 
 ``` scss
 /* 方法一：已知元素的宽高 */
@@ -722,6 +756,26 @@ Content-Type: text/html; charset=iso-8859-1
 		height: 200px;
 		margin: auto;
 	}
+}
+
+/* 方法三 */
+
+.wrapper {
+    position: relative;
+    div {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* 方法四: flex布局,父元素定义下列属性 */
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 ```
 
@@ -757,7 +811,7 @@ Content-Type: text/html; charset=iso-8859-1
 
 ### 27. 知道 css 有个 content 属性吗？有什么作用？有什么应用？
 
-> css 的 `content` 属性专门应用在 `before/after` 伪元素上，用于来插入生成内容。最常见的应用是利用伪元素清除浮动。
+> css 的 `content` 属性专门应用在 `before/after` 伪元素上，用来插入生成内容。最常见的应用是利用伪元素清除浮动。
 
 ``` css
 /* 一种常见利用伪元素清除浮动的代码 */
@@ -783,8 +837,8 @@ Content-Type: text/html; charset=iso-8859-1
 
 ### 29. 垂直居中的方法
 
-* 将显示方式设置为表格，`display: table-cell;` 同时设置 `vertical-align*: middle;`
-* 作用 `flex` 布局，设置 `align-items: center;`
+* 将显示方式设置为表格，`display: table-cell;` 同时设置 `vertical-align: middle;`
+* 使用 `flex` 布局，设置 `align-items: center;`
 * 绝对定位中设置 `top: 0; bottom: 0;` 并设置 `margin: auto;`
 * 绝对定位中固定高度时设置 `top: 50%; margin-top` 值为高度一半的负值
 * 文本垂直居中设置 `line-height` 为 `height` 值  
@@ -920,54 +974,7 @@ Content-Type: text/html; charset=iso-8859-1
 
 <br>
 
-### 34. 两种以上方式实现已知或者未知宽高的水平垂直居中
-
-```scss
-/** 1 **/
-.wrapper {
-    position: relative;
-    .box {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 100px;
-        height: 100px;
-        margin-top: -50px;
-        margin-left: -50px;
-    }
-}
-
-/** 2 **/
-.wrapper {
-    position: relative;
-    .box {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-}
-
-/** 3 **/
-.wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/** 4 **/
-.wrapper {
-    display: table;
-    .box {
-        display: table-cell;
-        vertical-align: middle;
-    }
-}
-```
-
-<br>
-
-### 35. 如何实现小于 12px 的字体效果
+### 34. 如何实现小于 12px 的字体效果
 
 > `transform: scale()` 这个属性只可以缩放可以定义宽高的元素，而行内元素是没有宽高的，我们可以加上一个 `display: inline-block;`
 
@@ -980,4 +987,2232 @@ transform: scale(0.7);
 ## 三、JavaScript
 
 ### 1. 闭包
+
+* 闭包就是能够读取其它函数内部变量的函数。
+* 闭包是指有权访问另一个函数作用域中变量的函数，创建闭包的最常见的方式就是在一个函数内创建另一个函数，通过另一个函数访问这个函数的局部变量，利用闭包可以突破作用域链。
+* 闭包的特性：
+  * 函数内再嵌套函数
+  * 内部函数可以引用外层的参数和变量
+  * 参数和变量不会被垃圾回收机制回收
+
+**说说你对闭包的理解**
+
+* 使用闭包主要是为了设计私有的方法和变量。闭包的优点是可以避免全局变量的污染，缺点是闭包会常驻内存，会增大内存使用量，使用不当很容易造成内存泄露。在 js 中，函数即闭包，只有函数才会产生作用域的概念。
+* 闭包的最大用处有两个，一个是可以读取函数内部的变量，另一个就是让这些变量始终保持在内存中。
+* 闭包的另一个用处，是封装对象的私有属性和方法。
+* **好处**：能够实现封装和缓存等。
+* **坏处**：就是消耗内存、不正当使用会造成内存溢出的问题。
+
+**使用闭包的注意点**
+
+* 由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在 IE 中可能导致内存泄露。
+* 解决方法是，在退出函数之前，将不使用的局部变量全部删除。  
+
+### 2. 说说你对作用域链的理解
+
+* 作用域链的作用是保证执行环境里有权访问的变量和函数是有序的，作用域链的变量只能向上访问，变量访问到 `window` 对象即被终止，作用域链向下访问变量是不被允许的。
+* 简单的说，作用域就是变量与函数的可访问范围，即作用域控制着变量与函数的可见性和生命周期。  
+
+### 3. JavaScript 原型，原型链 ? 有什么特点？
+
+- 每个对象都会在其内部初始化一个属性，就是 `prototype` (原型)，当我们访问一个对象的属性时，如果这个对象内部不存在这个属性，那么它就会去 `prototype` 里找这个属性，这个  `prototype` 又会有自己的 `prototype`，于是就这样一直找下去，也就是我们平时所说的原型链的概念。
+- 关系：`instance.constructor.prototype = instance.__proto__`
+- 特点：
+  - `JavaScript` 对象是通过引用来传递的，我们创建的每个新对象实体中并没有一份属于自己的原型副本。当我们修改原型时，与之相关的对象也会继承这一改变。
+- 当我们需要一个属性时，`JavaScript` 引擎会先看当前对象中是否有这个属性， 如果没有就会查找它的 `prototype` 对象是否有这个属性，如此递推下去，一直检索到  `Object` 内建对象。  
+
+### 4. 请解释什么是事件代理
+
+- 事件代理（`Event Delegation`），又称之为事件委托。是 `JavaScript` 中常用绑定事件的常用技巧。顾名思义，“事件代理”即是把原本需要绑定的事件委托给父元素，让父元素担当事件监听的职务。事件代理的原理是 DOM 元素的事件冒泡。
+- 使用事件代理的好处是可以提高性能。
+- 可以大量节省内存占用，减少事件注册，比如在 `table` 上代理所有 `td` 的 `click` 事件就非常棒
+- 可以实现当新增子对象时无需再次对其绑定。  
+
+### 5. Javascript 如何实现继承？
+
+- 构造继承
+- 原型继承
+- 实例继承
+- 拷贝继承
+- 原型 `prototype` 机制或 `apply` 和 `call` 方法去实现较简单，建议使用构造函数与原型混合方式
+
+``` js
+function Parent() {
+	this.name = 'wang';
+}
+
+function Child() {
+	this.age = 28;
+}
+    
+Child.prototype = new Parent();  // 继承了Parent，通过原型
+
+var demo = new Child();
+alert(demo.age);
+alert(demo.name);  // 得到被继承的属性
+```
+
+<br>
+
+### 6. 谈谈 this 对象的理解
+
+- `this` 总是指向函数的直接调用者（而非间接调用者）
+- 如果有 `new` 关键字，`this` 指向 `new` 出来的那个对象
+- 在事件中，`this` 指向触发这个事件的对象，特殊的是，`IE` 中的 `attachEvent` 中的 `this` 总是指向全局对象 `Window`  
+
+### 7. 事件流
+
+> `W3C` 中定义事件的发生经历三个阶段：捕获阶段（`capturing`）、目标阶段（`targetin`）、冒泡阶段（`bubbling`）
+
+- 冒泡型事件：当你使用事件冒泡时，子级元素先触发，父级元素后触发
+- 捕获型事件：当你使用事件捕获时，父级元素先触发，子级元素后触发
+- `DOM` 事件流：同时支持两种事件模型：捕获型事件和冒泡型事件
+- 阻止冒泡：在 `W3c` 中，使用 `stopPropagation()` 方法；在IE下设置 `cancelBubble = true;`
+- 阻止捕获：阻止事件的默认行为，例如 `click - <a>` 后的跳转。在 `W3c` 中，使用 `preventDefault()` 方法，在 `IE` 下设置 `window.event.returnValue = false;`  
+
+### 8. new 操作符具体干了什么呢?
+
+- 创建一个空对象，并且 `this` 变量引用该对象，同时还继承了该函数的原型
+- 属性和方法被加入到 `this` 引用的对象中
+- 新创建的对象由 `this` 所引用，并且最后隐式的返回 `this`  
+
+### 9. Ajax 原理
+
+- `Ajax` 的原理简单来说是在用户和服务器之间加了—个中间层(`AJAX`引擎)，通过`XmlHttpRequest` 对象来向服务器发异步请求，从服务器获得数据，然后用 `javascript` 来操作`DOM` 而更新页面。使用户操作与服务器响应异步化。这其中最关键的一步就是从服务器获得请求数据。
+- `Ajax` 的过程只涉及 `JavaScript`、`XMLHttpRequest` 和 `DOM`。`XMLHttpRequest` 是 `ajax` 的核心机制。
+
+``` js
+// 1. 创建连接 
+var xhr = null;
+xhr = new XMLHttpRequest();
+// 2. 连接服务器 
+xhr.open('get', url, true);
+// 3. 发送请求 
+xhr.send(null);
+// 4. 接受请求 
+xhr.onreadystatechange = function () {
+	if (xhr.readyState == 4) {
+		if (xhr.status == 200) {
+			success(xhr.responseText);
+		} else { 
+			// false 
+			fail && fail(xhr.status);
+		}
+	}
+}
+```
+
+**ajax 有那些优缺点?**
+
+- 优点：
+  - 通过异步模式，提升了用户体验。
+  - 优化了浏览器和服务器之间的传输，减少不必要的数据往返，减少了带宽占用。
+  - `Ajax` 在客户端运行，承担了一部分本来由服务器承担的工作，减少了大用户量下的服务器负载。
+  - `Ajax` 可以实现动态不刷新（局部刷新）
+- 缺点：
+  - 安全问题 `AJAX` 暴露了与服务器交互的细节。
+  - 对搜索引擎的支持比较弱。
+  - 不容易调试。
+
+<br>
+
+### 10. 如何解决跨域问题?
+
+> 首先了解下浏览器的同源策略：同源策略 `/SOP（Same origin policy）` 是一种约定，由Netscape 公司1995年引入浏览器，它是浏览器最核心也最基本的安全功能，如果缺少了同源策略，浏览器很容易受到 `XSS`、`CSFR` 等攻击。所谓同源是指“**协议+域名+端口**”三者相同，即便两个不同的域名指向同一个 ip 地址，也非同源。
+
+**那么怎样解决跨域问题的呢？**
+
+- **通过 jsonp 跨域**
+
+``` js
+var script = document.createElement('script');
+script.type = 'text/javascript';
+
+// 传参并指定回调执行函数为onBack
+script.src = 'http://www.....:8080/login?user=admin&callback=onBack';
+document.head.appendChild(script);
+
+// 回调执行函数
+function onBack(res) {
+    alert(JSON.stringify(res));
+}
+```
+
+* **document.domain + iframe 跨域**
+
+> 此方案仅限主域相同，子域不同的跨域应用场景
+
+1.）父窗口：(http://www.domain.com/a.html)
+
+```html
+<iframe id="iframe" src="http://child.domain.com/b.html"></iframe>
+<script>
+    document.domain = 'domain.com';
+    var user = 'admin';
+</script>
+```
+
+2.）子窗口：(http://child.domain.com/b.html)
+
+```javascript
+document.domain = 'domain.com';
+// 获取父窗口中变量
+alert('get js data from parent ---> ' + window.parent.user);
+```
+
+- **nginx 代理跨域**
+- **node.js 中间件代理跨域**
+- **后端在头部信息里面设置安全域名**  
+
+### 11. 模块化开发怎么做？
+
+- 立即执行函数，不暴露私有成员
+
+```js
+var module1 = (function () {
+　　　　var _count = 0;
+　　　　var m1 = function () {
+　　　　　　//...
+　　　　};
+　　　　var m2 = function () {
+　　　　　　//...
+　　　　};
+　　　　return {
+　　　　　　m1,
+　　　　　　m2
+　　　　};
+})();
+```
+
+<br>
+
+### 12. 异步加载 JS 的方式有哪些？
+
+- `defer`，只支持 `IE`
+- `async`
+- 创建 `script`，插入到 `DOM` 中，加载完毕后 `callBack`  
+
+### 13. 哪些操作会造成内存泄漏？
+
+- 内存泄漏指任何对象在你不再拥有或需要它之后仍然存在
+- `setTimeout` 的第一个参数使用字符串而非函数的话，会引发内存泄漏
+- 闭包使用不当  
+
+### 14. XML 和 JSON 的区别？
+
+- 数据体积方面
+  - `JSON` 相对于 `XML`来讲，数据的体积小，传递的速度更快些。
+- 数据交互方面
+  - `JSON` 与 `JavaScript` 的交互更加方便，更容易解析处理，更好的数据交互。
+- 数据描述方面
+  - `JSON` 对数据的描述性比 `XML` 较差
+- 传输速度方面
+  - `JSON` 的速度要远远快于 `XML`  
+
+### 15. 谈谈你对 webpack 的看法
+
+`WebPack` 是一个模块打包工具，你可以使用 `WebPack` 管理你的模块依赖，并编绎输出模块们所需的静态文件。它能够很好地管理、打包 `Web` 开发中所用到的 `HTML`、`JavaScript`、`CSS` 以及各种静态文件（图片、字体等），让开发过程更加高效。对于不同类型的资源，`webpack` 有对应的模块加载器。`webpack` 模块打包器会分析模块间的依赖关系，最后生成了优化且合并后的静态资源。  
+
+
+
+### 16. 常见 web 安全及防护原理
+
+- `sql` 注入原理
+  - 就是通过把 `SQL` 命令插入到 `Web` 表单递交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的 SQL 命令。
+- 总的来说有以下几点：
+  - 永远不要信任用户的输入，要对用户的输入进行校验，可以通过正则表达式，或限制长度，对单引号和双 `"-"` 进行转换等。
+  - 永远不要使用动态拼装 SQL，可以使用参数化的 `SQL` 或者直接使用存储过程进行数据查询存取。
+  - 永远不要使用管理员权限的数据库连接，为每个应用使用单独的权限有限的数据库连接。
+  - 不要把机密信息明文存放，请加密或者 `hash` 掉密码和敏感的信息。
+
+**XSS 原理及防范**
+
+- `Xss(cross-site scripting)` 攻击指的是攻击者往 `Web` 页面里插入恶意 `html` 标签或者`javascript` 代码。比如：攻击者在论坛中放一个看似安全的链接，骗取用户点击后，窃取`cookie` 中的用户私密信息；或者攻击者在论坛中加一个恶意表单，当用户提交表单的时候，却把信息传送到攻击者的服务器中，而不是用户原本以为的信任站点。
+
+**XSS 防范方法**
+
+- 首先代码里对用户输入的地方和变量都需要仔细检查长度和对 `”<”,”>”,”;”,”’”` 等字符做过滤；其次任何内容写到页面之前都必须加以encode，避免不小心把 `html tag` 弄出来。这一个层面做好，至少可以堵住超过一半的 XSS 攻击。
+
+**XSS 与 CSRF 有什么区别吗？**
+
+- `XSS` 是获取信息，不需要提前知道其他用户页面的代码和数据包。`CSRF` 是代替用户完成指定的动作，需要知道其他用户页面的代码和数据包。要完成一次 `CSRF` 攻击，受害者必须依次完成两个步骤：
+  - 登录受信任网站 `A`，并在本地生成 `Cookie`
+  - 在不登出 `A` 的情况下，访问危险网站 `B`
+
+**CSRF 的防御**
+
+- 服务端的 `CSRF` 方式方法很多样，但总的思想都是一致的，就是在客户端页面增加伪随机数。
+- 通过验证码的方法。  
+
+### 17. 用过哪些设计模式？
+
+- 工厂模式：
+  - 工厂模式解决了重复实例化的问题，但还有一个问题，那就是识别问题。
+  - 主要好处就是可以消除对象间的耦合，通过使用工程方法而不是 `new` 关键字。
+- 构造函数模式
+  - 使用构造函数的方法，既解决了重复实例化的问题，又解决了对象识别的问题，该模式与工厂模式的不同之处在于直接将属性和方法赋值给 `this` 对象。  
+
+### 18. 为什么要有同源限制？
+
+- 同源策略指的是：协议，域名，端口都相同，同源策略是一种安全协议。
+- 举例说明：比如一个黑客程序，他利用 `Iframe` 把真正的银行登录页面嵌到他的页面上，当你使用真实的用户名，密码登录时，他的页面就可以通过 `JavaScript` 读取到你的表单中 `input` 中的内容，这样用户名，密码就轻松到手了。  
+
+### 19. offsetWidth/offsetHeight，clientWidth/clientHeight 与scrollWidth/scrollHeight 的区别
+
+- `offsetWidth/offsetHeight` 返回值包含**content + padding + border**，效果与`e.getBoundingClientRect()` 相同。
+- `clientWidth/clientHeight` 返回值只包含**content + padding**，如果有滚动条，也**不包含滚动条。**
+- `scrollWidth/scrollHeight`返回值包含**content + padding + 溢出内容的尺寸。**  
+
+### 20. javascript 有哪些方法定义对象
+
+- 对象字面量： `var obj = {};`
+- 构造函数： `var obj = new Object();`
+- Object.create()： `var obj = Object.create(Object.prototype);`  
+
+### 21. 常见兼容性问题？
+
+- `png24` 位的图片在iE6浏览器上出现背景，解决方案是做成 `PNG8`
+- 浏览器默认的 `margin` 和 `padding` 不同。解决方案是加一个全局的`*{margin:0;padding:0;}`来统一，但是全局效率很低，一般是如下这样解决：
+
+``` css
+body, ul, li, ol, dl, dt, dd, form, input, h1, h2, h3, h4, h5, h6, p {
+	margin:0;
+	padding:0;
+}
+```
+
+- `IE` 下 `event` 对象有 `x`，`y` 属性,但是没有 `pageX`，`pageY` 属性
+- `Firefox` 下，`event` 对象有 `pageX`，`pageY` 属性,但是没有 `x`，`y` 属性。  
+
+### 22. 说说你对 promise 的了解
+
+- 依照 `Promise/A+` 的定义，`Promise` 有四种状态：
+  - `pending:` 初始状态, 非 `fulfilled` 或 `rejected`
+  - `fulfilled:` 成功的操作
+  - `rejected:` 失败的操作
+  - `settled: Promise` 已被 `fulfilled` 或 `rejected`，且不是 `pending`
+- 另外， `fulfilled` 与 `rejected` 一起合称 `settled`
+- `Promise` 对象用来进行延迟(`deferred`) 和异步(`asynchronous`) 计算
+
+**Promise 的构造函数**
+
+* 构造一个 `Promise`，最基本的用法如下：
+
+``` js
+var promise = new Promise(function (resolve, reject) {
+	if (...) {  // succeed
+		resolve(result);
+	} else {   // fails
+		reject(Error(errMessage));
+	}
+});
+```
+
+* `Promise` 实例拥有 `then` 方法（具有 `then` 方法的对象，通常被称为 `thenable`）。它的使用方法如下：
+
+``` js
+promise.then(onFulfilled, onRejected)
+```
+
+* 接收两个函数作为参数，一个在 `fulfilled` 的时候被调用，一个在 `rejected` 的时候被调用，接收参数就是 `future`，`onFulfilled` 对应 `resolve`, `onRejected` 对应 `reject`  
+
+### 23. 你觉得 jQuery 源码有哪些写的好的地方
+
+- `jquery` 源码封装在一个匿名函数的自执行环境中，有助于防止变量的全局污染，然后通过传入 `window` 对象参数，可以使 `window` 对象作为局部变量使用，好处是当 `jquery` 中访问 `window` 对象的时候，就不用将作用域链退回到顶层作用域了，从而可以更快的访问 `window` 对象。同样，传入 `undefined` 参数，可以缩短查找 `undefined` 时的作用域链。
+- `jquery` 将一些原型属性和方法封装在了 `jquery.prototype` 中，为了缩短名称，又赋值给了 `jquery.fn`，这是很形象的写法。
+- 有一些数组或对象的方法经常能使用到，`jQuery` 将其保存为局部变量以提高访问速度。
+- `jquery` 实现的链式调用可以节约代码，所返回的都是同一个对象，可以提高代码效率。  
+
+### 24. vue、react、angular
+
+- `Vue.js` 一个用于创建 `web` 交互界面的库，是一个精简的 `MVVM`。它通过双向数据绑定把 `View` 层和 `Model` 层连接了起来。实际的 `DOM` 封装和输出格式都被抽象为了 `Directives` 和 `Filters`。
+- `AngularJS` 是一个比较完善的前端 `MVVM` 框架，包含模板，数据双向绑定，路由，模块化，服务，依赖注入等所有功能，模板功能强大丰富，自带了丰富的 `Angular` 指令。
+- `React` 仅仅 `VIEW` 层是 `facebook` 公司。推出的一个用于构建 `UI` 的一个库，能够实现服务器端的渲染。用了 `virtual dom`，所以性能很好。  
+
+### 25. Node的应用场景
+
+- 特点：
+
+  1. 它是一个 `Javascript` 运行环境
+
+  2. 依赖于 `Chrome V8` 引擎进行代码解释
+
+  3. 事件驱动
+
+  4. 非阻塞 `I/O`
+
+  5. 单进程，单线程
+
+- 优点：
+
+  - 高并发（最重要的优点）
+
+- 缺点：
+
+  1. 只支持单核 `CPU`，不能充分利用 `CPU`
+
+  2. 可靠性低，一旦代码某个环节崩溃，整个系统都崩溃  
+
+### 26. 谈谈你对 AMD、CMD 的理解
+
+- `CommonJS` 是服务器端模块的规范，`Node.js` 采用了这个规范。`CommonJS` 规范加载模块是同步的，也就是说，只有加载完成，才能执行后面的操作。`AMD` 规范则是非同步加载模块，允许指定回调函数。
+- `AMD` 推荐的风格通过返回一个对象做为模块对象，`CommonJS` 的风格通过对 `module.exports` 或 `exports` 的属性赋值来达到暴露模块对象的目的。 
+
+**ES6 模块 CommonJS、AMD、CMD**
+
+- `CommonJS` 的规范中，每个 `JavaScript` 文件就是一个独立的模块上下文（`module context`），在这个上下文中默认创建的属性都是私有的。也就是说，在一个文件定义的变量（还包括函数和类），都是私有的，对其他文件是不可见的。
+- `CommonJS` 是同步加载模块，在浏览器中会出现堵塞情况，所以不适用。
+- `AMD` 异步，需要定义回调 `define` 方式
+- `ES6` 一个模块就是一个独立的文件，该文件内部的所有变量，外部无法获取。如果你希望外部能够读取模块内部的某个变量，就必须使用 `export` 关键字输出该变量， `ES6` 还可以导出类、方法，自动适用严格模式。  
+
+### 27. js 的6种基本数据类型
+
+`Null`、`Undefined`、`Boolean`、`Number`、`String`、`Symbol`  
+
+### 28. 介绍 js 有哪些内置对象
+
+- `Object` 是 `JavaScript` 中所有对象的父对象
+- 数据封装类对象：`Object`、`Array`、`Boolean`、`Number` 和 `String`
+- 其他对象：`Function`、`Arguments`、`Math`、`Date`、`RegExp`、`Error`  
+
+### 29.  说几条写 JavaScript 的基本规范
+
+- 不要在同一行声明多个变量
+- 请使用 `===/!==` 来比较 `true/false` 或者数值
+- 使用对象字面量替代 `new Array` 这种形式
+- 不要使用全局函数
+- `switch` 语句必须带有 `default` 分支
+- `if` 语句必须使用大括号
+- `for-in` 循环中的变量 应该使用 `var` 关键字明确限定作用域，从而避免作用域污染  
+
+### 30. JavaScript 有几种类型的值
+
+- 栈：原始数据类型（`Undefined`，`Null`，`Boolean`，`Number`、`String`）
+- 堆：引用数据类型（对象、数组和函数）
+- 两种类型的区别是：存储位置不同；
+- 原始数据类型直接存储在栈(`stack`)中的简单数据段，占据空间小、大小固定，属于被频繁使用数据，所以放入栈中存储；
+- 引用数据类型存储在堆(`heap`)中的对象，占据空间大、大小不固定，如果存储在栈中，将会影响程序运行的性能；引用数据类型在栈中存储了指针，该指针指向堆中该实体的起始地址。当解释器寻找引用值时，会首先检索其在栈中的地址，取得地址后从堆中获得实体。  
+
+### 31. javascript 创建对象的几种方式
+
+> `javascript` 创建对象简单的说，无非就是使用内置对象或各种自定义对象，当然还可以用 `JSON`；但写法有很多种，也能混合使用。
+
+- 对象字面量的方式
+
+``` js
+var obj = { name: li };
+```
+
+- 用 `function` 来模拟无参的构造函数
+
+```javascript
+function Person() {};
+var person = new Person();  // 定义一个function，如果使用new"实例化",该function可以看作是一个Class
+person.name = "Mark";
+person.age = "25";
+person.work = function () {
+    alert(person.name + " hello...");
+}
+person.work();
+```
+
+- 用 `function` 来模拟有参构造函数来实现（用 `this` 关键字定义构造的上下文属性）
+
+```javascript
+function Pet(name, age, hobby) {
+    this.name = name;  // this作用域：当前对象
+    this.age = age;
+    this.hobby = hobby;
+    this.eat = function () {
+        alert("我叫" + this.name + ",我喜欢" + this.hobby + ",是个程序员");
+    }
+}
+var maidou = new Pet("麦兜", 25, "coding");  // 实例化、创建对象
+maidou.eat();  // 调用eat方法
+```
+
+- 用工厂方式来创建（内置对象）
+
+```javascript
+var wcDog = new Object();
+wcDog.name = "旺财";
+wcDog.age = 3;
+wcDog.work = function () {
+    alert("我是" + wcDog.name + ",汪汪汪......");
+}
+wcDog.work();
+```
+
+- 用原型方式来创建
+
+```javascript
+function Dog() {};
+Dog.prototype.name = "旺财";
+Dog.prototype.eat = function () {
+    alert(this.name + "是个吃货");
+}
+var wangcai = new Dog();
+wangcai.eat();
+```
+
+* 用混合方式来创建
+
+``` js
+function Car(name, price) {
+    this.name = name;
+    this.price = price;
+}
+Car.prototype.sell = function () {
+    alert("我是" + this.name + "，我现在卖" + this.price + "万元");
+}
+var camry = new Car("凯美瑞", 27);
+camry.sell();
+```
+
+<br>
+
+### 32. eval 是做什么的
+
+- 它的功能是把对应的字符串解析成 `JS` 代码并运行
+- 应该避免使用 `eval`，不安全，非常耗性能（`2`次，一次解析成 `js` 语句，一次执行）
+- 由 `JSON` 字符串转换为 `JSON` 对象的时候可以用 `eval`，`var obj = eval('('+ str +')');`  
+
+### 33. null，undefined 的区别
+
+- `undefined` 表示不存在这个值。
+- `undefined`：是一个表示"无"的原始值或者说表示"缺少值"，就是此处应该有一个值，但是还没有定义。当尝试读取时会返回 `undefined`。
+- 例如变量被声明了，但没有赋值时，就等于 `undefined`。
+- `null` 表示一个对象被定义了，值为“空值”。
+- `null`：是一个对象(空对象, 没有任何属性和方法)。
+- 例如作为函数的参数，表示该函数的参数不是对象。
+- 在验证 `null` 时，一定要使用 `===`，因为 `==` 无法分辨 `null` 和 `undefined`。  
+
+### 34. ["1", "2", "3"].map(parseInt) 答案是多少
+
+- `[1, NaN, NaN]` 因为 `parseInt` 需要两个参数 `(val, radix)`，其中 `radix` 表示解析时用的基数。
+- `map` 传了 `3` 个 `(element, index, array)`，对应的 `radix` 不合法导致解析失败。  
+
+### 35.  javascript 代码中的 "use strict" 是什么意思
+
+`use strict` 是一种 `ECMAscript 5` 添加的（严格）运行模式，这种模式使得 `JavaScript` 在更严格的条件下运行，使 `JS` 编码更加规范化的模式，消除 `JavaScript` 语法的一些不合理、不严谨之处，减少一些怪异行为。  
+
+### 36.  JSON 的了解
+
+- `JSON(JavaScript Object Notation)` 是一种轻量级的数据交换格式
+- 它是基于 `JavaScript` 的一个子集。数据格式简单，易于读写，占用带宽小
+- `JSON` 字符串转换为 `JSON` 对象：
+
+```javascript
+var obj = eval('('+ str +')');
+var obj = str.parseJSON();
+var obj = JSON.parse(str);
+```
+
+- `JSON` 对象转换为 `JSON` 字符串：
+
+```js
+var last = obj.toJSONString();
+var last = JSON.stringify(obj);
+```
+
+<br>
+
+### 37. js 延迟加载的方式有哪些
+
+`defer` 和 `async`、动态创建 `DOM` 方式（用得最多）、按需异步载入 `js`  
+
+### 38. 同步和异步的区别
+
+- 同步：浏览器访问服务器请求，用户看得到页面刷新，重新发请求，等请求完页面刷新，新内容出现，用户看到新内容，进行下一步操作。
+- 异步：浏览器访问服务器请求，用户正常操作，浏览器后端进行请求。等请求完页面不刷新，新内容也会出现，用户看到新内容。  
+
+### 39. defer 和 async
+
+- `defer` 并行加载 `js` 文件，会按照页面上 `script` 标签的顺序执行
+- `async` 并行加载 `js ` 文件，下载完成立即执行，不会按照页面上 `script` 标签的顺序执行  
+
+### 40. 说说严格模式的限制
+
+- 变量必须声明后再使用
+- 函数的参数不能有同名属性，否则报错
+- 不能使用 `with` 语句
+- 禁止 `this` 指向全局对象  
+
+### 41. attribute 和 property 的区别是什么
+
+- `attribute` 是 `dom` 元素在文档中作为 `html` 标签拥有的属性；
+- `property` 就是 `dom` 元素在 `js` 中作为对象拥有的属性。
+- 对于 `html` 的标准属性来说，`attribute` 和 `property` 是同步的，是会自动更新的。
+- 但是对于自定义的属性来说，他们是不同步的。  
+
+### 42. 谈谈你对 ES6 的理解
+
+- 新增模板字符串（为 `JavaScript` 提供了简单的字符串插值功能）
+- 箭头函数
+- `for of`（用来遍历数据，例如数组中的值。）
+- `arguments` 对象可被不定参数和默认参数完美代替。
+- `ES6` 将 `promise` 对象纳入规范，提供了原生的 `Promise` 对象。
+- 增加了 `let` 和 `const` 命令，用来声明变量。
+- 增加了块级作用域。
+- `let` 命令实际上就增加了块级作用域。
+- 还有就是引入 `module` 模块的概念。    
+
+### 43. 什么是面向对象编程及面向过程编程，它们的异同和优缺点
+
+- 面向过程就是分析出解决问题所需要的步骤，然后用函数把这些步骤一步一步实现，使用的时候一个一个依次调用就可以了。
+- 面向对象是把构成问题事务分解成各个对象，建立对象的目的不是为了完成一个步骤，而是为了描叙某个事物在整个解决问题的步骤中的行为。
+- 面向对象是以功能来划分问题，而不是步骤。  
+
+### 44. 面向对象编程思想
+
+- 基本思想是使用对象，类，继承，封装等基本概念来进行程序设计
+- 优点
+  - 易维护
+    - 采用面向对象思想设计的结构，可读性高，由于继承的存在，即使改变需求，那么维护也只是在局部模块，所以维护起来是非常方便和较低成本的。
+  - 易扩展
+  - 开发工作的重用性、继承性高，降低重复工作量
+  - 缩短了开发周期  
+
+### 45. 对 web 标准、可用性、可访问性的理解
+
+- 可用性（Usability）：产品是否容易上手，用户能否完成任务，效率如何，以及这过程中用户的主观感受可好，是从用户的角度来看产品的质量。可用性好意味着产品质量高，是企业的核心竞争力。
+- 可访问性（Accessibility）：Web 内容对于残障用户的可阅读和可理解性。
+- 可维护性（Maintainability）：一般包含两个层次，一是当系统出现问题时，快速定位并解决问题的成本，成本低则可维护性好。二是代码是否容易被人理解，是否容易修改和增强功能。  
+
+### 46. 如何通过JS判断一个数组
+
+- `instanceof` 方法
+  - `instanceof` 运算符是用来测试一个对象是否在其原型链原型构造函数的属性
+
+```javascript
+var arr = [];
+arr instanceof Array; // true
+```
+
+- `constructor` 方法
+  - `constructor` 属性返回对创建此对象的数组函数的引用，就是返回对象相对应的构造函数
+
+```javascript
+var arr = [];
+arr.constructor == Array; // true
+```
+
+- 最简单的方法
+  - 这种写法，是 `jQuery` 正在使用的
+
+```javascript
+Object.prototype.toString.call(value) == '[object Array]';
+// 利用这个方法，可以写一个返回数据类型的方法
+var isType = function (obj) {
+	return Object.prototype.toString.call(obj).slice(8,-1);
+}
+```
+
+- `ES5` 新增方法 `isArray()`
+
+```javascript
+var a = new Array(123);
+var b = new Date();
+console.log(Array.isArray(a)); // true
+console.log(Array.isArray(b)); // false
+```
+
+<br>
+
+### 47. 谈一谈 let 与 var 的区别
+
+- `let` 命令不存在变量提升，如果在 `let` 前使用，会导致报错
+- 如果块区中存在 `let` 和 `const` 命令，就会形成封闭作用域
+- 不允许重复声明，因此，不能在函数内部重新声明参数  
+
+### 48. map 与 forEach 的区别
+
+- `forEach` 方法，是最基本的方法，就是遍历与循环，默认有3个传参：分别是遍历的数组内容 `item`、数组索引 `index`、和当前遍历数组 `Array`
+- `map`方法，基本用法与 `forEach` 一致，但是不同的，它会返回一个新的数组，所以在 callback 需要有`return` 值，如果没有，会返回 `undefined`  
+
+### 49. 谈一谈你理解的函数式编程
+
+- 简单说，"函数式编程"是一种"编程范式"（programming paradigm），也就是如何编写程序的方法论
+- 它具有以下特性：闭包和高阶函数、惰性计算、递归、函数是"第一等公民"、只用"表达式"  
+
+### 50. 谈一谈箭头函数与普通函数的区别？
+
+- 函数体内的 `this` 对象，就是定义时所在的对象，而不是使用时所在的对象
+- 不可以当作构造函数，也就是说，不可以使用 `new` 命令，否则会抛出一个错误
+- 不可以使用 `arguments` 对象，该对象在函数体内不存在。如果要用，可以用 `Rest` 参数代替
+- 不可以使用 `yield` 命令，因此箭头函数不能用作 `Generator` 函数  
+
+### 51. 异步编程的实现方式
+
+- 回调函数
+  - 优点：简单、容易理解。
+  - 缺点：不利于维护，代码耦合高。
+- 事件监听（采用事件驱动模式，取决于某个事件是否发生）
+  - 优点：容易理解，可以绑定多个事件，每个事件可以指定多个回调函数。
+  - 缺点：事件驱动型，流程不够清晰。
+- 发布/订阅（观察者模式）
+  - 类似于事件监听，但是可以通过“消息中心”，了解现在有多少发布者，多少订阅者。
+- Promise 对象
+  - 优点：可以利用 then 方法，进行链式写法；可以书写错误时的回调函数。
+  - 缺点：编写和理解，相对比较难。
+- Generator 函数
+  - 优点：函数体内外的数据交换、错误处理机制。
+  - 缺点：流程管理不方便。
+- async 函数
+  - 优点：内置执行器、更好的语义、更广的适用性、返回的是 Promise、结构清晰。
+  - 缺点：错误处理机制。  
+
+### 52. 对原生 Javascript 了解程度
+
+数据类型、运算、对象、Function、继承、闭包、作用域、原型链、事件、`RegExp`、`JSON`、`Ajax`、`DOM`、`BOM`、内存泄漏、跨域、异步装载、模板引擎、前端 `MVC`、路由、模块化、`Canvas`、`ECMAScript`  
+
+### 53. Js 动画与 CSS 动画区别及相应实现
+
+- `CSS3` 的动画的优点
+  - 在性能上会稍微好一些，浏览器会对 `CSS3` 的动画做一些优化
+  - 代码相对简单
+- 缺点
+  - 在动画控制上不够灵活
+  - 兼容性不好
+- `JavaScript` 的动画正好弥补了这两个缺点，控制能力很强，可以单帧的控制、变换，同时写得好完全可以兼容 `IE6`，并且功能强大。对于一些复杂控制的动画，使用 `javascript` 会比较靠谱。而在实现一些小的交互动效的时候，就多考虑考虑 `CSS` 吧。  
+
+### 54. JS 数组和对象的遍历方式，以及几种方式的比较
+
+> 通常我们会用循环的方式来遍历数组。但是循环是导致 js 性能问题的原因之一。一般我们会采用下几种方式来进行数组的遍历
+
+- `for in` 循环
+- `for` 循环
+- `forEach`
+  - 这里的 `forEach` 回调中两个参数分别为 `value`，`index`
+  - `forEach` 无法遍历对象
+  - IE 不支持该方法；`Firefox` 和 `Chrome` 支持
+  - `forEach` 无法使用 `break`，`continue` 跳出循环，且使用 `return` 是跳过本次循环
+- 这两种方法应该非常常见且使用很频繁。但实际上，这两种方法都存在性能问题。
+- 在方式一中，`for in`需要分析出 `array` 的每个属性，这个操作性能开销很大。用在 `key` 已知的数组上是非常不划算的。所以尽量不要用 `for in`，除非你不清楚要处理哪些属性，例如 `JSON` 对象这样的情况。
+- 在方式二中，循环每进行一次，就要检查一下数组长度。读取属性（数组长度）要比读取局部变量慢，尤其是当 `array` 里存放的都是 `DOM` 元素，因为每次读取都会扫描一遍页面上的选择器相关元素，速度会大大降低。  
+
+### 55.  gulp 是什么
+
+- `gulp` 是前端开发过程中一种基于流的代码构建工具，是自动化项目的构建利器；它不仅能对网站资源进行优化，而且在开发过程中很多重复的任务能够使用正确的工具自动完成。
+- gulp 的核心概念：流
+- 流：简单来说就是建立在面向对象基础上的一种抽象的处理数据的工具。在流中，定义了一些处理数据的基本操作，如读取数据，写入数据等，程序员是对流进行所有操作的，而不用关心流的另一头数据的真正流向。
+- gulp 正是通过流和代码优于配置的策略来尽量简化任务编写的工作。
+- gulp 的特点：
+  - **易于使用**：通过代码优于配置的策略，gulp 让简单的任务简单，复杂的任务可管理。
+  - **构建快速**：利用 `Node.js` 流的威力，你可以快速构建项目并减少频繁的 `IO` 操作。
+  - **易于学习**：通过最少的 `API`，掌握 `gulp` 毫不费力，构建工作尽在掌握：如同一系列流管道。  
+
+### 56. 说一下 Vue 的双向绑定数据的原理
+
+`vue.js` 则是采用数据劫持结合发布者-订阅者模式的方式，通过 `Object.defineProperty()` 来劫持各个属性的 `setter`、`getter`，在数据变动时发布消息给订阅者，触发相应的监听回调。  
+
+### 57. 事件的各个阶段
+
+- 1：捕获阶段 ---> 2：目标阶段 ---> 3：冒泡阶段
+- `document` ---> `target`目标 ----> `document`
+- 由此，`addEventListener`的第三个参数设置为 `true` 和 `false` 的区别已经非常清晰了
+  - `true` 表示该元素在事件的“捕获阶段”（由外往内传递时）响应事件
+  - `false` 表示该元素在事件的“冒泡阶段”（由内向外传递时）响应事件  
+
+### 58. let、var、const
+
+**let**
+
+- 允许你声明一个作用域被限制在块级中的变量、语句或者表达式。
+- `let` 绑定不受变量提升的约束，这意味着 `let` 声明不会被提升到当前。
+- 该变量处于从块开始到初始化处理的“暂存死区”。
+
+**var**
+
+- 声明变量的作用域限制在其声明位置的上下文中，而非声明变量总是全局的。
+- 由于变量声明（以及其他声明）总是在任意代码执行之前处理的，所以在代码中的任意位置声明变量总是等效于在代码开头声明。
+
+**const**
+
+- 声明创建一个值的只读引用 (即指针)。
+- 基本数据当值发生改变时，那么其对应的指针也将发生改变，故造成 `const` 申明基本数据类型再将其值改变时，将会造成报错， 例如 `const a = 3;`  `a = 5` 时将会报错。
+- 但是如果是复合类型时，如果只改变复合类型的其中某个 `Value` 项时， 将还是正常使用。  
+
+### 59. 快速的让一个数组乱序
+
+```javascript
+var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+arr.sort(function () {
+	return Math.random() - 0.5;
+})
+console.log(arr);
+```
+
+<br>
+
+### 60. 如何渲染几万条数据并不卡住界面
+
+> 这道题考察了如何在不卡住页面的情况下渲染数据，也就是说不能一次性将几万条都渲染出来，而应该一次渲染部分 `DOM`，那么就可以通过 `requestAnimationFrame` 来每 `16 ms` 刷新一次
+
+``` html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+	<ul>控件</ul>
+	<script>
+		setTimeout(() => {
+			// 插入十万条数据
+			const total = 100000;
+			// 一次插入 20 条，如果觉得性能不好就减少
+			const once = 20;
+			// 渲染数据总共需要几次
+			const loopCount = total / once;
+			let countOfRender = 0;
+			let ul = document.querySelector("ul");
+			function add() {
+				// 优化性能，插入不会造成回流
+				const fragment = document.createDocumentFragment();
+				for (let i = 0; i < once; i++) {
+					const li = document.createElement("li");
+					li.innerText = Math.floor(Math.random() * total);
+					fragment.appendChild(li);
+				}
+				ul.appendChild(fragment);
+				countOfRender += 1;
+				loop();
+			}
+			function loop() {
+				if (countOfRender < loopCount) {
+					window.requestAnimationFrame(add);
+				}
+			}
+			loop();
+		}, 0);
+	</script>
+</body>
+</html>
+```
+
+<br>
+
+### 61. 希望获取到页面中所有的 checkbox 怎么做？
+
+> 不使用第三方框架
+
+``` js
+var domList = document.getElementsByTagName('input');
+var checkBoxList = [];
+// 缓存到局部变量
+var len = domList.length;　　
+// 使用while的效率会比for循环更高
+while (len--) {　　
+    if (domList[len].type == 'checkbox') {
+        checkBoxList.push(domList[len]);
+    }
+}
+```
+
+<br>
+
+### 62. 怎样添加、移除、移动、复制、创建和查找节点
+
+**创建新节点**
+
+``` js
+createDocumentFragment()  // 创建一个DOM片段
+createElement()           // 创建一个具体的元素
+createTextNode()          // 创建一个文本节点
+```
+
+**添加、移除、替换、插入**
+
+``` js
+appendChild()       // 添加
+removeChild()       // 移除
+replaceChild()      // 替换
+insertBefore()      // 插入
+```
+
+**查找**
+
+``` js
+getElementsByTagName()    // 通过标签名称
+getElementsByClassName()  // 通过元素类名
+getElementById()          // 通过元素Id，唯一性
+```
+
+<br>
+
+### 63. 正则表达式
+
+> 正则表达式构造函数 `var reg = new RegExp('xxx');`与正则表达字面量 `var reg = //;`有什么不同？匹配邮箱的正则表达式？
+
+当使用 `RegExp()` 构造函数的时候，不仅需要转义引号（即 `\` ”表示”），并且还需要双反斜杠（即 `\\` 表示一个 `\`）。使用正则表达字面量的效率更高.
+
+邮箱的正则匹配：
+
+``` js
+var regMail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+```
+
+<br>
+
+### 64. Javascript 中 callee 和 caller 的作用？
+
+- `caller` 是返回一个对函数的引用，该函数调用了当前函数；
+- `callee` 是返回正在被执行的 `function` 函数，也就是所指定的 `function` 对象的正文。
+
+> 那么问题来了？如果一对兔子每月生一对兔子；一对新生兔，从第二个月起就开始生兔子；假定每对兔子都是一雌一雄，试问一对兔子，第n个月能繁殖成多少对兔子？（使用 `callee` 完成）
+
+``` js
+var result = [];
+function fn(n) {  // 典型的斐波那契数列
+    if (n == 1) {
+        return 1;
+    } else if (n == 2) {
+        return 1;
+    } else {
+        if (result[n]) {
+            return result[n];
+        } else {
+            // argument.callee()表示fn()
+            result[n] = arguments.callee(n - 1) + arguments.callee(n - 2);
+            return result[n];
+        }
+    }
+}
+```
+
+<br>
+
+### 65. window.onload 和 $(document).ready
+
+> 原生 `JS` 的 `window.onload` 与 `Jquery` 的 `$(document).ready(function(){})` 有什么不同？如何用原生 JS 实现 Jq 的 `ready` 方法？
+
+- `window.onload()` 方法是必须等到页面内包括图片的所有元素加载完毕后才能执行。
+- `$(document).ready() `是 `DOM` 结构绘制完毕后就执行，不必等到加载完毕。
+
+``` js
+function ready(fn) {
+    if (document.addEventListener) {        // 标准浏览器
+        document.addEventListener('DOMContentLoaded', function () {
+            // 注销事件, 避免反复触发
+            document.removeEventListener('DOMContentLoaded', arguments.callee, false);
+            fn();            // 执行函数
+        }, false);
+    } else if (document.attachEvent) {      // IE
+        document.attachEvent('onreadystatechange', function () {
+            if (document.readyState == 'complete') {
+                document.detachEvent('onreadystatechange', arguments.callee);
+                fn();        // 函数执行
+            }
+        });
+    }
+}
+```
+
+<br>
+
+### 66. addEventListener() 和 attachEvent() 的区别
+
+- `addEventListener()` 是符合 W3C 规范的标准方法； `attachEvent()` 是 IE 低版本的非标准方法。
+- `addEventListener()` 支持事件冒泡和事件捕获；而 `attachEvent()` 只支持事件冒泡。
+- `addEventListener()` 的第一个参数中，事件类型不需要添加 `on`； `attachEvent()` 需要添加 `'on'`。
+- 如果为同一个元素绑定多个事件， `addEventListener()` 会按照事件绑定的顺序依次执行， `attachEvent()` 会按照事件绑定的顺序倒序执行。  
+
+### 67. 数组去重方法总结
+
+**方法一、利用 ES6 Set 去重（ES6中最常用）**
+
+``` js
+function unique(arr) {
+    return Array.from(new Set(arr));
+}
+var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+console.log(unique(arr));
+// [1, "true", true, 15, false, undefined, null, NaN, "NaN", 0, "a", {}, {}]
+// {}没有去重
+```
+
+**方法二、利用 for 嵌套 for，然后 splice 去重（ES5 中最常用）**
+
+> 双层循环，外层循环元素，内层循环时比较值。值相同时，则删去这个值。
+
+``` js
+function unique(arr) {
+    for (var i = 0; i < arr.length; i++) {
+        for (var j = i + 1; j < arr.length; j++) {
+            if (arr[i] == arr[j]) {  // 第一个等同于第二个，splice方法删除第二个
+                arr.splice(j, 1);
+                j--;
+            }
+        }
+    }
+    return arr;
+}
+var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+console.log(unique(arr));
+// [1, "true", 15, false, undefined, NaN, NaN, "NaN", "a", {…}, {…}]     
+// NaN和{}没有去重，两个null直接消失了
+```
+
+**方法三、利用 indexOf 去重**
+
+> 新建一个空的结果数组，`for` 循环原数组，判断结果数组是否存在当前元素，如果有相同的值则跳过，不相同则 `push` 进数组
+
+``` js
+function unique(arr) {
+    if (!Array.isArray(arr)) {
+        console.log('type error!');
+        return;
+    }
+    var array = [];
+    for (var i = 0; i < arr.length; i++) {
+        if (array.indexOf(arr[i]) === -1) {
+            array.push(arr[i]);
+        }
+    }
+    return array;
+}
+var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+console.log(unique(arr));
+// [1, "true", true, 15, false, undefined, null, NaN, NaN, "NaN", 0, "a", {…}, {…}]  
+// NaN、{}没有去重
+```
+
+**方法四、利用 sort()**
+
+> 利用 `sort()` 排序方法，然后根据排序后的结果进行遍历及相邻元素比对
+
+``` js
+function unique(arr) {
+    if (!Array.isArray(arr)) {
+        console.log('type error!');
+        return;
+    }
+    arr = arr.sort();
+    var result = [arr[0]];
+    for (var i = 1; i < arr.length; i++) {
+        if (arr[i] !== arr[i - 1]) {
+            result.push(arr[i]);
+        }
+    }
+    return result;
+}
+var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+console.log(unique(arr));
+// [0, 1, 15, "NaN", NaN, NaN, {…}, {…}, "a", false, null, true, "true", undefined]
+// NaN、{}没有去重
+```
+
+**方法五、利用对象的属性不能相同的特点进行去重**
+
+``` js
+function unique(arr) {
+    if (!Array.isArray(arr)) {
+        console.log('type error!');
+        return;
+    }
+    var array = [];
+    var obj = {};
+    for (var i = 0; i < arr.length; i++) {
+        if (!obj[arr[i]]) {
+            array.push(arr[i]);
+            obj[arr[i]] = 1;
+        } else {
+            obj[arr[i]]++;
+        }
+    }
+    return array;
+}
+var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+console.log(unique(arr));
+// [1, "true", 15, false, undefined, null, NaN, 0, "a", {…}]    
+// 两个true直接去掉了，NaN和{}去重
+```
+
+**方法六、利用 includes**
+
+``` js
+function unique(arr) {
+    if (!Array.isArray(arr)) {
+        console.log('type error!');
+        return;
+    }
+    var array = [];
+    for (var i = 0; i < arr.length; i++) {
+        if (!array.includes(arr[i])) {  // includes 检测数组是否有某个值
+            array.push(arr[i]);
+        }
+    }
+    return array;
+}
+var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+console.log(unique(arr));
+// [1, "true", true, 15, false, undefined, null, NaN, "NaN", 0, "a", {…}, {…}]
+// {}没有去重
+```
+
+**方法七、利用 hasOwnProperty**
+
+> 利用 `hasOwnProperty` 判断是否存在对象属性
+
+``` js
+function unique(arr) {
+    var obj = {};
+    return arr.filter(function (item, index, arr) {
+        return obj.hasOwnProperty(typeof item + item) ? false : (obj[typeof item + item] = true);
+    });
+}
+var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+console.log(unique(arr));
+// [1, "true", true, 15, false, undefined, null, NaN, "NaN", 0, "a", {…}]
+// 所有的都去重了
+```
+
+**方法八、利用 filter**
+
+``` js
+function unique(arr) {
+    return arr.filter(function (item, index, arr) {
+        // 当前元素在原始数组中的第一个索引 === 当前索引值？
+        return arr.indexOf(item, 0) === index;
+    });
+}
+var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+console.log(unique(arr));
+// [1, "true", true, 15, false, undefined, null, "NaN", 0, "a", {…}, {…}]
+// {}没有去重，两个NaN直接消失了
+```
+
+**方法九、利用递归去重**
+
+``` js
+function unique(arr) {
+    var array = arr;
+    var len = array.length;
+
+    array.sort(function (a, b) {   //排序后更加方便去重
+        return a - b;
+    })
+
+    function loop(index) {
+        if (index >= 1) {
+            if (array[index] === array[index - 1]) {
+                array.splice(index, 1);
+            }
+            loop(index - 1);    //递归loop，然后数组去重
+        }
+    }
+    loop(len - 1);
+    return array;
+}
+var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+console.log(unique(arr));
+// [1, "true", false, null, 0, true, 15, NaN, NaN, "NaN", "a", {…}, {…}, undefined]
+// NaN、{}没有去重
+```
+
+**方法十、利用Map数据结构去重**
+
+> 创建一个空 `Map` 数据结构，遍历需要去重的数组，把数组的每一个元素作为 `key` 存到 `Map` 中。由于 `Map` 中不会出现相同的 `key` 值，所以最终得到的就是去重后的结果
+
+``` js
+function unique(arr) {
+    let map = new Map();
+    let array = [];  // 数组用于返回结果
+    for (let i = 0; i < arr.length; i++) {
+        if (map.has(arr[i])) {  // 如果有该key值
+            map.set(arr[i], true);
+        } else {
+            map.set(arr[i], false);   // 如果没有该key值
+            array.push(arr[i]);
+        }
+    }
+    return array;
+}
+var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+console.log(unique(arr));
+// [1, "true", true, 15, false, undefined, null, NaN, "NaN", 0, "a", {…}, {…}]
+// {}没有去重
+```
+
+**方法十一、利用 reduce + includes**
+
+``` js
+function unique(arr) {
+    return arr.reduce((prev, cur) => prev.includes(cur) ? prev : [...prev, cur], []);
+}
+var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+console.log(unique(arr));
+// [1, "true", true, 15, false, undefined, null, NaN, "NaN", 0, "a", {…}, {…}]
+// {}没有去重
+```
+
+<br>
+
+### 68. 想实现对页面某个节点的拖拽？如何做？（使用原生JS）
+
+- 给需要拖拽的节点绑定 `mousedown`、`mousemove`、 `mouseup` 事件
+- `mousedown` 事件触发后，开始拖拽
+- `mousemove` 时，需要通过 `event.clientX` 和 `clientY` 获取拖拽位置，并实时更新位置
+- `mouseup` 时，拖拽结束
+- 需要注意浏览器边界的情况  
+
+### 69. Javascript全局函数和全局变量
+
+**全局变量**
+
+- `Infinity` 代表正的无穷大的数值。
+- `NaN` 指示某个值是不是数字值。
+- `undefined` 指示未定义的值。
+
+**全局函数**
+
+- `decodeURI()` 解码某个编码的 `URI`。
+- `decodeURIComponent()` 解码一个编码的 `URI` 组件。
+- `encodeURI()` 把字符串编码为 `URI`。
+- `encodeURIComponent()` 把字符串编码为 `URI` 组件。
+- `escape()` 对字符串进行编码。
+- `eval()` 计算 `JavaScript` 字符串，并把它作为脚本代码来执行。
+- `isFinite()` 检查某个值是否为有穷大的数。
+- `isNaN()` 检查某个值是否是数字。
+- `Number()` 把对象的值转换为数字。
+- `parseFloat()` 解析一个字符串并返回一个浮点数。
+- `parseInt()` 解析一个字符串并返回一个整数。
+- `String()` 把对象的值转换为字符串。
+- `unescape()` 对由 `escape()` 编码的字符串进行解码  
+
+### 70. 使用 js 实现一个持续的动画效果
+
+**定时器思路**
+
+``` js
+var e = document.getElementById('e');
+var flag = true;
+var left = 0;
+setInterval(() => {
+    left == 0 ? flag = true : left == 100 ? flag = false : '';
+    flag ? e.style.left = ` ${left++}px` : e.style.left = ` ${left--}px`;
+}, 1000 / 60);
+```
+
+**requestAnimationFrame**
+
+``` js
+//兼容性处理
+window.requestAnimFrame = (function () {
+    return window.requestAnimationFrame
+        || window.webkitRequestAnimationFrame
+        || window.mozRequestAnimationFrame
+        || function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        }
+})();
+
+var e = document.getElementById("e");
+var flag = true;
+var left = 0;
+
+function render() {
+    left == 0 ? flag = true : left == 100 ? flag = false : '';
+    flag ? e.style.left = ` ${left++}px` : e.style.left = ` ${left--}px`;
+}
+
+(function animloop() {
+    render();
+    requestAnimFrame(animloop);
+})();
+```
+
+**使用css实现一个持续的动画效果**
+
+```css
+animation: mymove 5s infinite;
+
+@keyframes mymove {
+    from {
+        top: 0px;
+    }
+    to {
+        top: 200px;
+    }
+}
+```
+
+- `animation-name` 规定需要绑定到选择器的 `keyframe` 名称。
+- `animation-duration` 规定完成动画所花费的时间，以秒或毫秒计。
+- `animation-timing-function` 规定动画的速度曲线。
+- `animation-delay` 规定在动画开始之前的延迟。
+- `animation-iteration-count` 规定动画应该播放的次数。
+- `animation-direction` 规定是否应该轮流反向播放动画 。 
+
+### 71. 封装一个函数，参数是定时器的时间，.then执行回调函数
+
+```js
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+```
+
+<br>
+
+### 72. 怎么判断两个对象相等？
+
+> 可以转换为字符串来判断
+
+``` js
+obj = {
+    a: 1,
+    b: 2
+}
+obj2 = {
+    a: 1,
+    b: 2
+}
+obj3 = {
+    a: 1,
+    b: '2'
+}
+
+JSON.stringify(obj) == JSON.stringify(obj2);  // true
+JSON.stringify(obj) == JSON.stringify(obj3);  // false
+```
+
+<br>
+
+### 73. 项目做过哪些性能优化？
+
+- 减少 `HTTP` 请求数
+- 减少 `DNS` 查询
+- 使用 `CDN`
+- 避免重定向
+- 图片懒加载
+- 减少 `DOM` 元素数量
+- 减少 `DOM` 操作
+- 使用外部 `JavaScript` 和 `CSS`
+- 压缩 `JavaScript` 、 `CSS` 、字体、图片等
+- 优化 `CSS Sprite`
+- 使用 `iconfont`
+- 字体裁剪
+- 多域名分发划分内容到不同域名
+- 尽量减少 `iframe` 使用
+- 避免图片 `src` 为空
+- 把样式表放在 `link` 中
+- 把 `JavaScript` 放在页面底部  
+
+### 74. 说一下浏览器的缓存机制
+
+> 浏览器缓存机制有两种，一种为强缓存，一种为协商缓存
+
+- 对于强缓存，浏览器在第一次请求的时候，会直接下载资源，然后缓存在本地，第二次请求的时候，直接使用缓存。
+- 对于协商缓存，第一次请求缓存且保存缓存标识与时间，重复请求向服务器发送缓存标识和最后缓存时间，服务端进行校验，如果失效则使用缓存。
+
+**强缓存**
+
+- `Expires`：服务端的响应头，第一次请求的时候，告诉客户端，该资源什么时候会过期。`Exprires` 的缺陷是必须保证服务端时间和客户端时间严格同步。
+- `Cache-control: max-age`：表示该资源多少时间后过期，解决了客户端和服务端时间必须同步的问题。
+
+**协商缓存**
+
+- `If-None-Match/ETag`：缓存标识，对比缓存时使用它来标识一个缓存，第一次请求的时候，服务端会返回该标识给客户端，客户端在第二次请求的时候会带上该标识与服务端进行对比并返回 `If-None-Match` 标识是否表示匹配。
+- `Last-modified/If-Modified-Since`：第一次请求的时候服务端返回 `Last-modified` 表明请求的资源上次的修改时间，第二次请求的时候客户端带上请求头 `If-Modified-Since`，表示资源上次的修改时间，服务端拿到这两个字段进行对比
+
+### 75. WebSocket
+
+> 由于 `http` 存在一个明显的弊端（消息只能有客户端推送到服务器端，而服务器端不能主动推送到客户端），导致服务器如果有连续的变化，这时只能使用轮询，而轮询效率过低，并不适合。于是 `WebSocket`被发明出来。
+
+> 相比与 `http` 具有以下优点：
+
+- 支持双向通信，实时性更强；
+- 可以发送文本，也可以二进制文件；
+- 协议标识符是 `ws`，加密后是 `wss`；
+- 较少的控制开销。连接创建后，`ws` 客户端、服务端进行数据交换时，协议控制的数据包头部较小。在不包含头部的情况下，服务端到客户端的包头只有 `2~10` 字节（取决于数据包长度），客户端到服务端的话，需要加上额外的 `4` 字节的掩码。而 `HTTP` 协议每次通信都需要携带完整的头部；
+- 支持扩展。`ws` 协议定义了扩展，用户可以扩展协议，或者实现自定义的子协议。（比如支持自定义压缩算法等）
+- 无跨域问题。
+
+> 实现比较简单，服务端库如 `socket.io`、`ws`，可以很好的帮助我们入门。而客户端也只需要参照 `api` 实现即可。
+
+### 76. 深浅拷贝
+
+**浅拷贝**
+
+- `Object.assign`
+- 或者展开运算符
+
+**深拷贝**
+
+- 可以通过 `JSON.parse(JSON.stringify(object))` 来解决
+
+``` js
+let a = {
+    age: 1,
+    jobs: {
+        first: 'FE'
+    }
+}
+let b = JSON.parse(JSON.stringify(a));
+a.jobs.first = 'native';
+console.log(b.jobs.first) // FE
+```
+
+**该方法也是有局限性的**
+
+- 会忽略 `undefined`
+- 不能序列化函数
+- 不能解决循环引用的对象  
+
+### 77. 防抖/节流
+
+**防抖**
+
+> 在滚动事件中需要做个复杂计算或者实现一个按钮的防二次点击操作。可以通过函数防抖动来实现
+
+``` js
+// 使用 underscore 的源码来解释防抖动
+
+/**
+ * underscore 防抖函数，返回函数连续调用时，空闲时间必须大于或等于 wait，func 才会执行
+ *
+ * @param  {function} func        回调函数
+ * @param  {number}   wait        表示时间窗口的间隔
+ * @param  {boolean}  immediate   设置为ture时，是否立即调用函数
+ * @return {function}             返回客户调用函数
+ */
+_.debounce = function (func, wait, immediate) {
+    var timeout, args, context, timestamp, result;
+
+    var later = function () {
+        // 现在和上一次时间戳比较
+        var last = _.now() - timestamp;
+        // 如果当前间隔时间少于设定时间且大于0就重新设置定时器
+        if (last < wait && last >= 0) {
+            timeout = setTimeout(later, wait - last);
+        } else {
+            // 否则的话就是时间到了执行回调函数
+            timeout = null;
+            if (!immediate) {
+                result = func.apply(context, args);
+                if (!timeout) {
+                    context = args = null;
+                }
+            }
+        }
+    };
+
+    return function () {
+        context = this;
+        args = arguments;
+        // 获得时间戳
+        timestamp = _.now();
+        // 如果定时器不存在且立即执行函数
+        var callNow = immediate && !timeout;
+        // 如果定时器不存在就创建一个
+        if (!timeout) {
+            timeout = setTimeout(later, wait);
+        }
+        if (callNow) {
+            // 如果需要立即执行函数的话 通过 apply 执行
+            result = func.apply(context, args);
+            context = args = null;
+        }
+
+        return result;
+    };
+}
+```
+
+> 整体函数实现
+
+对于按钮防点击来说的实现
+
+- 开始一个定时器，只要我定时器还在，不管你怎么点击都不会执行回调函数。一旦定时器结束并设置为 null，就可以再次点击了
+- 对于延时执行函数来说的实现：每次调用防抖动函数都会判断本次调用和之前的时间间隔，如果小于需要的时间间隔，就会重新创建一个定时器，并且定时器的延时为设定时间减去之前的时间间隔。一旦时间到了，就会执行相应的回调函数
+
+**节流**
+
+> 防抖动和节流本质是不一样的。防抖动是将多次执行变为最后一次执行，节流是将多次执行变成每隔一段时间执行
+
+``` js
+/**
+ * underscore 节流函数，返回函数连续调用时，func 执行频率限定为 次 / wait
+ *
+ * @param  {function}   func      回调函数
+ * @param  {number}     wait      表示时间窗口的间隔
+ * @param  {object}     options   如果想忽略开始函数的的调用，传入{leading: false}。
+ *                                如果想忽略结尾函数的调用，传入{trailing: false}
+ *                                两者不能共存，否则函数不能执行
+ * @return {function}             返回客户调用函数   
+ */
+_.throttle = function (func, wait, options) {
+    var context, args, result;
+    var timeout = null;
+    // 之前的时间戳
+    var previous = 0;
+    // 如果 options 没传则设为空对象
+    if (!options) {
+        options = {};
+    }
+    // 定时器回调函数
+    var later = function () {
+        // 如果设置了 leading，就将 previous 设为 0
+        // 用于下面函数的第一个 if 判断
+        previous = options.leading === false ? 0 : _.now();
+        // 置空一是为了防止内存泄漏，二是为了下面的定时器判断
+        timeout = null;
+        result = func.apply(context, args);
+        if (!timeout) {
+            context = args = null;
+        }
+    };
+    return function () {
+        // 获得当前时间戳
+        var now = _.now();
+        // 首次进入前者肯定为 true
+        // 如果需要第一次不执行函数
+        // 就将上次时间戳设为当前的
+        // 这样在接下来计算 remaining 的值时会大于0
+        if (!previous && options.leading === false) {
+            previous = now;
+        }
+        // 计算剩余时间
+        var remaining = wait - (now - previous);
+        context = this;
+        args = arguments;
+        // 如果当前调用已经大于上次调用时间 + wait
+        // 或者用户手动调了时间
+        // 如果设置了 trailing，只会进入这个条件
+        // 如果没有设置 leading，那么第一次会进入这个条件
+        // 还有一点，你可能会觉得开启了定时器那么应该不会进入这个 if 条件了
+        // 其实还是会进入的，因为定时器的延时
+        // 并不是准确的时间，很可能你设置了2秒
+        // 但是他需要2.2秒才触发，这时候就会进入这个条件
+        if (remaining <= 0 || remaining > wait) {
+            // 如果存在定时器就清理掉否则会调用二次回调
+            if (timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+            }
+            previous = now;
+            result = func.apply(context, args);
+            if (!timeout) {
+                context = args = null;
+            }
+        } else if (!timeout && options.trailing !== false) {
+            // 判断是否设置了定时器和 trailing
+            // 没有的话就开启一个定时器
+            // 并且不能不能同时设置 leading 和 trailing
+            timeout = setTimeout(later, remaining);
+        }
+        return result;
+    };
+}
+```
+
+<br>
+
+### 78. 谈谈变量提升？
+
+> 当执行 JS 代码时，会生成执行环境，只要代码不是写在函数中的，就是在全局执行环境中，函数中的代码会产生函数执行环境，只此两种执行环境
+
+接下来让我们看一个老生常谈的例子，`var`
+
+``` js
+b();  // call b
+console.log(a);  // undefined
+
+var a = 'Hello world';
+
+function b() {
+    console.log('call b');
+}
+```
+
+> 这是因为函数和变量提升的原因。通常提升的解释是说将声明的代码移动到了顶部，这其实没有什么错误，便于大家理解。但是更准确的解释应该是：在生成执行环境时，会有两个阶段。第一个阶段是创建的阶段，JS 解释器会找出需要提升的变量和函数，并且给他们提前在内存中开辟好空间，函数的话会将整个函数存入内存中，变量只声明并且赋值为 `undefined`，所以在第二个阶段，也就是代码执行阶段，我们可以直接提前使用。在提升的过程中，相同的函数会覆盖上一个函数，并且函数优先于变量提升。
+
+``` js
+b();  // call b second
+
+function b() {
+    console.log('call b fist');
+}
+function b() {
+    console.log('call b second');
+}
+var b = 'Hello world';
+```
+
+> 复制代码 `var` 会产生很多错误，所以在 `ES6` 中引入了 `let`。`let` 不能在声明前使用，但是这并不是常说的 `let` 不会提升，`let` 提升了，在第一阶段内存也已经为他开辟好了空间，但是因为这个声明的特性导致了并不能在声明前使用。
+
+### 79. 什么是单线程，和异步的关系
+
+- 单线程 - 只有一个线程，只能做一件事
+- 原因 - 避免 `DOM` 渲染的冲突
+  - 浏览器需要渲染 `DOM`
+  - `JS` 可以修改 `DOM` 结构
+  - `JS` 执行的时候，浏览器 `DOM` 渲染会暂停
+  - 两段 JS 也不能同时执行（都修改 `DOM` 就冲突了）
+  - `webworker` 支持多线程，但是不能访问 `DOM`
+- 解决方案 - 异步  
+
+### 80. 实现效果，点击容器内的图标，图标边框变成border: 1px solid red，点击空白处重置
+
+``` js
+const box = document.getElementById('box');
+function isIcon(target) {
+    return target.className.includes('icon');
+}
+
+box.onClick = function (e) {
+    e.stopPropagation();
+    const target = e.target;
+    if (isIcon(target)) {
+        target.style.border = '1px solid red';
+    }
+}
+const doc = document;
+doc.onclick = function () {
+    const children = box.children;
+    for (let i; i < children.length; i++) {
+        if (isIcon(children[i])) {
+            children[i].style.border = 'none';
+        }
+    }
+}
+```
+
+<br>
+
+### 81. 请简单实现双向数据绑定 `mvvm`
+
+``` html
+<input id="input"/>
+```
+
+``` js
+const data = {};
+const input = document.getElementById('input');
+Object.defineProperty(data, 'text', {
+    set(value) {
+        input.value = value;
+        this.value = value;
+    }
+});
+input.onChange = function (e) {
+    data.text = e.target.value;
+}
+```
+
+<br>
+
+### 82. 实现 Storage，使得该对象为单例，并对 localStorage 进行封装设置值 setItem(key,value) 和 getItem(key)
+
+``` js
+var instance = null;
+class Storage {
+    static getInstance() {
+        if (!instance) {
+            instance = new Storage();
+        }
+        return instance;
+    }
+    setItem = (key, value) => localStorage.setItem(key, value);
+    getItem = key => localStorage.getItem(key);
+}
+```
+
+<br>
+
+### 83.  说说 event loop
+
+> 首先，`js`是单线程的，主要的任务是处理用户的交互，而用户的交互无非就是响应 `DOM` 的增删改，使用事件队列的形式，一次事件循环只处理一个事件响应，使得脚本执行相对连续，所以有了事件队列，用来储存待执行的事件，那么事件队列的事件从哪里被 `push` 进来的呢。那就是另外一个线程叫事件触发线程做的事情了，他的作用主要是在定时触发器线程、异步 `HTTP` 请求线程满足特定条件下的回调函数 `push` 到事件队列中，等待 `js` 引擎空闲的时候去执行，当然 `js` 引擎执行过程中有优先级之分，首先 `js` 引擎在一次事件循环中，会先执行 `js` 线程的主任务，然后会去查找是否有微任务 `microtask(promise)`，如果有那就优先执行微任务，如果没有，在去查找宏任务 `macrotask(setTimeout、setInterval)` 进行执行
+
+### 84. 说说事件流
+
+**事件流分为两种，捕获事件流和冒泡事件流**
+
+- 捕获事件流从根节点开始执行，一直往子节点查找执行，直到查找执行到目标节点
+- 冒泡事件流从目标节点开始执行，一直往父节点冒泡查找执行，直到查到到根节点
+
+> 事件流分为三个阶段，一个是捕获阶段，一个是处于目标节点阶段，一个是冒泡阶段
+
+### 85. 说说从输入 URL 到看到页面发生的全过程，越详细越好
+
+- 首先浏览器主进程接管，开了一个下载线程。
+- 然后进行 HTTP 请求（DNS 查询、IP 寻址等等）中间会有三次握手，等待响应，开始下载响应报文。
+- 将下载完的内容转交给 Renderer 进程管理。
+- Renderer 进程开始解析 css rule tree 和 dom tree，这两个过程是并行的，所以一般我会把 link 标签放在页面顶部。
+- 解析绘制过程中，当浏览器遇到 link 标签或者 script、img 等标签，浏览器会去下载这些内容，遇到适用缓存的使用缓存，不适用缓存的重新下载资源。
+- css rule tree 和 dom tree 生成完了之后，开始合成 render tree，这个时候浏览器会进行 layout，开始计算每一个节点的位置，然后进行绘制。
+- 绘制结束后，关闭 TCP 连接，过程有四次挥手。
+
+### 86. 描述一下 this
+
+> `this`，函数执行的上下文，可以通过 `apply`，`call`，`bind `改变 `this` 的指向。对于匿名函数或者直接调用的函数来说，`this` 指向全局上下文（浏览器为 window，NodeJS 为 `global`），剩下的函数调用，那就是谁调用它，`this` 就指向谁。当然还有 ES6 的箭头函数，箭头函数的指向取决于该箭头函数声明的位置，在哪里声明，`this` 就指向哪里。
+
+### 87. 现在要你完成一个 Dialog 组件，说说你设计的思路？它应该有什么功能？
+
+- 该组件需要提供 `hook` 指定渲染位置，默认渲染在 body 下面。
+- 然后该组件可以指定外层样式，如宽度等。
+- 组件外层还需要一层 `mask` 来遮住底层内容，点击 `mask` 可以执行传进来的 `onCancel` 函数关闭 `Dialog`。
+- 另外组件是可控的，需要外层传入 `visible` 表示是否可见。
+- 然后 `Dialog` 可能需要自定义头 `head` 和底部 `footer`，默认有头部和底部，底部有一个确认按钮和取消按钮，确认按钮会执行外部传进来的 `onOk` 事件，然后取消按钮会执行外部传进来的 `onCancel` 事件。
+- 当组件的 `visible` 为 `true` 时候，设置 `body` 的 `overflow` 为 `hidden`，隐藏 `body` 的滚动条，反之显示滚动条。
+- 组件高度可能大于页面高度，组件内部需要滚动条。
+- 只有组件的 `visible` 有变化且为 `ture` 时候，才重渲染组件内的所有内容。  
+
+### 88. caller 和 callee 的区别
+
+**callee**
+
+> `caller` 返回一个函数的引用，这个函数调用了当前的函数。
+
+**使用时要注意**
+
+- 这个属性只有当函数在执行时才有用。
+- 如果在 `javascript` 程序中，函数是由顶层调用的，则返回 `null`。
+
+> `functionName.caller: functionName`是当前正在执行的函数。
+
+```js
+function a() {
+	console.log(a.caller);
+}
+```
+
+**callee**
+
+> `callee` 返回正在执行的函数本身的引用，它是 `arguments` 的一个属性
+
+**使用时要注意**
+
+- 这个属性只有在函数执行时才有效。
+- 它有一个 `length` 属性，可以用来获得形参的个数，因此可以用来比较形参和实参个数是否一致，即比较 `arguments.length` 是否等于 `arguments.callee.length`。
+- 它可以用来递归匿名函数。
+
+``` js
+function a() {
+	console.log(arguments.callee);
+}
+```
+
+<br>
+
+### 89. ajax、axios、fetch 区别
+
+**jQuery ajax**
+
+``` js
+$.ajax({
+    type: 'POST',
+    url: url,
+    data: data,
+    dataType: dataType,
+    success: function () {},
+    error: function () {}
+});
+```
+
+优缺点：
+
+- 本身是针对 `MVC` 的编程，不符合现在前端 `MVVM` 的浪潮。
+- 基于原生的 `XHR` 开发，`XHR` 本身的架构不清晰，已经有了 `fetch` 的替代方案。
+- `JQuery` 整个项目太大，单纯使用 `ajax` 却要引入整个 `JQuery` 非常的不合理（采取个性化打包的方案又不能享受 CDN 服务）  
+
+**axios**
+
+``` js
+axios({
+    method: 'post',
+    url: '/user/12345',
+    data: {
+        firstName: 'Fred',
+        lastName: 'Flintstone'
+    }
+})
+.then(function (response) {
+    console.log(response);
+})
+.catch(function (error) {
+    console.log(error);
+});
+```
+
+优缺点：
+
+- 从浏览器中创建 `XMLHttpRequest`
+- 从 `node.js` 发出 `http` 请求
+- 支持 `Promise API`
+- 拦截请求和响应
+- 转换请求和响应数据
+- 取消请求
+- 自动转换 `JSON` 数据
+- 客户端支持防止 `CSRF/XSRF`  
+
+**fetch**
+
+``` js
+try {
+    let response = await fetch(url);
+    let data = response.json();
+    console.log(data);
+} catch (e) {
+    console.log("Oops, error", e);
+}
+```
+
+优缺点：
+
+- `fetcht` 只对网络请求报错，对 `400`，`500` 都当做成功的请求，需要封装去处理。
+- `fetch` 默认不会带 `cookie`，需要添加配置项。
+- `fetch` 不支持 `abort`，不支持超时控制，使用 `setTimeout` 及 `Promise.reject` 的实现的超时控制并不能阻止请求过程继续在后台运行，造成了量的浪费。
+- `fetch` 没有办法原生监测请求的进度，而 XHR 可以。  
+
+<br>
+
+## 四、jQuery
+
+### 1. 你觉得 jQuery 源码有哪些写的好的地方
+
+- `jquery` 源码封装在一个匿名函数的自执行环境中，有助于防止变量的全局污染，然后通过传入`window` 对象参数，可以使 `window` 对象作为局部变量使用，好处是当 `jquery` 中访问 `window` 对象的时候，就不用将作用域链退回到顶层作用域了，从而可以更快的访问 `window` 对象。同样，传入 `undefined` 参数，可以缩短查找 `undefined` 时的作用域链。
+
+```javascript
+ (function (window, undefined) {
+
+    // 用一个函数域包起来，就是所谓的沙箱
+
+    // 在这里边var定义的变量，属于这个函数域内的局部变量，避免污染全局
+
+    // 把当前沙箱需要的外部变量通过函数参数引入进来
+
+    // 只要保证参数对内提供的接口的一致性，你还可以随意替换传进来的这个参数
+
+    window.jQuery = window.$ = jQuery;
+
+})(window);
+```
+
+- `jquery` 将一些原型属性和方法封装在了 `jquery.prototype` 中，为了缩短名称，又赋值给了 `jquery.fn`，这是很形象的写法。
+- 有一些数组或对象的方法经常能使用到，`jQuery` 将其保存为局部变量以提高访问速度。
+- `jquery` 实现的链式调用可以节约代码，所返回的都是同一个对象，可以提高代码效率。
+
+### 2. jQuery 的实现原理
+
+- `(function(window, undefined) {})(window);`
+- `jQuery` 利用 `JS` 函数作用域的特性，采用立即调用表达式包裹了自身，解决命名空间和变量污染问题。
+- `window.jQuery = window.$ = jQuery;`
+- 在闭包当中将` jQuery` 和 `$` 绑定到 `window` 上，从而将 `jQuery` 和 `$` 暴露为全局变量。
+
+### 3. jQuery.fn 的 init 方法返回的 this 指的是什么对象
+
+- `jQuery.fn` 的 `init` 方法 返回的 `this` 就是 `jQuery` 对象。
+- 用户使用` jQuery()` 或 `$()` 即可初始化 `jQuery` 对象，不需要动态的去调用 `init` 方法。
+
+### 4. jQuery.extend 与 jQuery.fn.extend 的区别
+
+- `$.fn.extend()` 和 `$.extend()` 是 `jQuery` 为扩展插件提拱了两个方法。
+- `$.extend(object)` 为 `jQuery` 添加“静态方法”（工具方法）
+
+```javascript
+$.extend({
+	min: function(a, b) { return a < b ? a : b; },
+	max: function(a, b) { return a > b ? a : b; }
+});
+$.min(2,3); //  2
+$.max(4,5); //  5
+```
+
+- `$.extend([true,] targetObject, object1[, object2])`  对 `targt` 对象进行扩展
+
+```javascript
+var settings = {validate:false, limit:5};
+var options = {validate:true, name:"bar"};
+$.extend(settings, options);  // 注意：不支持第一个参数传 false
+// settings = {validate:true, limit:5, name:"bar"}
+```
+
+- `$.fn.extend(json)` 为 `jQuery` 添加“成员函数”（实例方法）
+
+```javascript
+$.fn.extend({
+    alertValue: function () {
+        $(this).click(function () {
+            alert($(this).val());
+        });
+    }
+});
+
+$("#email").alertValue();
+```
+
+<br>
+
+### 5. jQuery 的属性拷贝(extend)的实现原理是什么，如何实现深拷贝
+
+- 浅拷贝（只复制一份原始对象的引用） `var newObject = $.extend({}, oldObject);`
+- 深拷贝（对原始对象属性所引用的对象进行进行递归拷贝） `var newObject = $.extend(true, {}, oldObject);`
+
+### 6. jQuery 的队列是如何实现的
+
+- jQuery 核心中有一组队列控制方法，由 `queue()/dequeue()/clearQueue()` 三个方法组成。
+- 主要应用于 `animate()`，`ajax`，其他要按时间顺序执行的事件中
+
+```javascript
+var func1 = function () { alert('事件1'); }
+var func2 = function () { alert('事件2'); }
+var func3 = function () { alert('事件3'); }
+var func4 = function () { alert('事件4'); }
+
+// 入栈队列事件
+$('#box').queue("queue1", func1);  // push func1 to queue1
+$('#box').queue("queue1", func2);  // push func2 to queue1
+
+// 替换队列事件
+$('#box').queue("queue1", []);  // delete queue1 with empty array
+$('#box').queue("queue1", [func3, func4]);  // replace queue1
+
+// 获取队列事件（返回一个函数数组）
+$('#box').queue("queue1");  // [func3(), func4()]
+
+// 出栈队列事件并执行
+$('#box').dequeue("queue1"); // return func3 and do func3
+$('#box').dequeue("queue1"); // return func4 and do func4
+
+// 清空整个队列
+$('#box').clearQueue("queue1"); // delete queue1 with clearQueue
+```
+
+<br>
+
+### 7.  jQuery 中的 bind(), live(), delegate(), on() 的区别
+
+- `bind()` 直接绑定在目标元素上
+- `live()` 通过冒泡传播事件，默认 `document` 上，支持动态数据
+- `delegate()` 更精确的小范围使用事件代理，性能优于 live
+- `on()` 是最新的 `1.9` 版本整合了之前的三种方式的新事件绑定机制
+
+### 8. 是否知道自定义事件
+
+- 事件即“发布/订阅”模式，自定义事件即“消息发布”，事件的监听即“订阅”
+- JS 原生支持自定义事件，示例：
+
+```javascript
+document.createEvent(type); // 创建事件
+event.initEvent(eventType, canBubble, prevent); // 初始化事件
+target.addEventListener('dataavailable', handler, false); // 监听事件
+target.dispatchEvent(e);  // 触发事件
+```
+
+- jQuery 里的 `fire` 函数用于调用 `jQuery` 自定义事件列表中的事件
+
+### 9. jQuery 通过哪个方法和 Sizzle 选择器结合的
+
+- `Sizzle` 选择器采取 `Right To Left` 的匹配模式，先搜寻所有匹配标签，再判断它的父节点。
+- `jQuery` 通过 `$(selecter).find(selecter);` 和 `Sizzle` 选择器结合。
+
+### 10. jQuery 中如何将数组转化为 JSON 字符串，然后再转化回来
+
+```javascript
+// 通过原生 JSON.stringify/JSON.parse 扩展 jQuery 实现
+$.array2json = function (array) {
+    return JSON.stringify(array);
+}
+
+$.json2array = function (array) {
+    // $.parseJSON(array); // 3.0 开始，已过时
+    return JSON.parse(array);
+}
+
+// 调用
+var json = $.array2json(['a', 'b', 'c']);
+var array = $.json2array(json);
+```
+
+<br>
+
+### 11. jQuery 一个对象可以同时绑定多个事件，这是如何实现的
+
+```javascript
+$("#btn").on("mouseover mouseout", func);
+
+$("#btn").on({
+    mouseover: func1,
+    mouseout: func2,
+    click: func3
+});
+```
+
+<br>
+
+### 12. 针对 jQuery 的优化方法
+
+- 缓存频繁操作 `DOM` 对象
+- 尽量使用 `id` 选择器代替 `class` 选择器
+- 总是从 `#id` 选择器来继承
+- 尽量使用链式操作
+- 使用时间委托 `on` 绑定事件
+- 采用 `jQuery` 的内部函数 `data()` 来存储数据
+- 使用最新版本的 `jQuery`
+
+### 13. jQuery 的 slideUp 动画，当鼠标快速连续触发, 动画会滞后反复执行，该如何处理呢
+
+- 在触发元素上的事件设置为延迟处理：使用 `JS` 原生 `setTimeout` 方法
+- 在触发元素的事件时预先停止所有的动画，再执行相应的动画事件：`$('.tab').stop().slideUp();`
+
+### 14. jQuery UI 如何自定义组件
+
+- 通过向 `$.widget()` 传递组件名称和一个原型对象来完成
+- `$.widget("ns.widgetName", [baseWidget], widgetPrototype);`
+
+### 15. jQuery 与 jQuery UI、jQuery Mobile 区别
+
+- `jQuery` 是 `JS` 库，兼容各种 PC 浏览器，主要用作更方便地处理 `DOM`、事件、动画、`AJAX`
+- `jQuery UI` 是建立在 `jQuery` 库上的一组用户界面交互、特效、小部件及主题
+- `jQuery Mobile` 以 `jQuery` 为基础，用于创建“移动Web应用”的框架
+
+### 16. jQuery 对象的特点
+
+- 只有 `JQuery `对象才能使用 `JQuery` 方法
+- `JQuery` 对象是一个数组对象
+
+<br>
+
+## 五、Bootstrap
+
+### 1. 什么是 Bootstrap？以及为什么要使用 Bootstrap？
+
+> `Bootstrap` 是一个用于快速开发 `Web` 应用程序和网站的前端框架。`Bootstrap` 是基于 `HTML`、`CSS`、`JAVASCRIPT` 的
+
+`Bootstrap` 具有移动设备优先、浏览器支持良好、容易上手、响应式设计等优点，所以 `Bootstrap` 被广泛应用
+
+### 2. 使用 Bootstrap 时，要声明的文档类型是什么？以及为什么要这样声明？
+
+- 使用 `Bootstrap` 时，需要使用 `HTML5` 文档类型（`Doctype`）`<!DOCTYPE html>`
+- 因为 `Bootstrap` 使用了一些 `HTML5` 元素和 `CSS` 属性，如果在 `Bootstrap` 创建的网页开头不使用 `HTML5` 的文档类型（`Doctype`），可能会面临一些浏览器显示不一致的问题，甚至可能面临一些特定情境下的不一致，以致于代码不能通过 `W3C` 标准的验证
+
+### 3. 什么是 Bootstrap 网格系统
+
+> `Bootstrap` 包含了一个响应式的、移动设备优先的、不固定的网格系统，可以随着设备或视口大小的增加而适当地扩展到 `12` 列。它包含了用于简单的布局选项的预定义类，也包含了用于生成更多语义布局的功能强大的混合类
+
+- 响应式网格系统随着屏幕或视口（`viewport`）尺寸的增加，系统会自动分为最多 `12` 列。
+
+### 4. Bootstrap 网格系统（Grid System）的工作原理
+
+- （1）行必须放置在 `.container class` 内，以便获得适当的对齐（`alignment`）和内边距（`padding`）。
+- （2）使用行来创建列的水平组。
+- （3）内容应该放置在列内，且唯有列可以是行的直接子元素。
+- （4）预定义的网格类，比如 `.row` 和 `.col-xs-4`，可用于快速创建网格布局。`LESS` 混合类可用于更多语义布局。
+- （5）列通过内边距（`padding`）来创建列内容之间的间隙。该内边距是通过 `.rows` 上的外边距（`margin`）取负，表示第一列和最后一列的行偏移。
+- （6）网格系统是通过指定您想要横跨的十二个可用的列来创建的。例如，要创建三个相等的列，则使用三个 `.col-xs-4`
+
+### 5. 对于各类尺寸的设备，Bootstrap 设置的 class 前缀分别是什么
+
+- 超小设备手机（`<768px`）：`.col-xs-*`
+- 小型设备平板电脑（`>=768px`）：`.col-sm-*`
+- 中型设备台式电脑（`>=992px`）：`.col-md-*`
+- 大型设备台式电脑（`>=1200px`）：`.col-lg-*`
+
+### 6. Bootstrap 网格系统列与列之间的间隙宽度是多少
+
+> 间隙宽度为 `30px`（一个列的每边分别是 `15px`）
+
+### 7. 如果需要在一个标题的旁边创建副标题，可以怎样操作
+
+> 在元素两旁添加 `<small>`，或者添加 `.small ` 的 `class`
+
+### 8. 用 Bootstrap，如何设置文字的对齐方式？
+
+- `class="text-center"` 设置居中文本
+- `class="text-right"` 设置向右对齐文本
+- `class="text-left"` 设置向左对齐文本
+
+### 9. Bootstrap 如何设置响应式表格？
+
+> 增加 `class="table-responsive"`
+
+### 10. 使用 Bootstrap 创建垂直表单的基本步骤？
+
+- （1）向父 `<form>` 元素添加 `role="form"`；
+- （2）把标签和控件放在一个带有 `class="form-group"` 的 `<div>` 中，这是获取最佳间距所必需的；
+- （3）向所有的文本元素 `<input>`、`<textarea>`、`<select>` 添加 `class="form-control"`
+
+### 11. 使用 Bootstrap 创建水平表单的基本步骤？
+
+- （1）向父 `<form>`元素添加 `class="form-horizontal"`；
+- （2）把标签和控件放在一个带有 `class="form-group"` 的 `<div>` 中；
+- （3）向标签添加 `class="control-label"`。
+
+### 12. 使用 Bootstrap 如何创建表单控件的帮助文本？
+
+> 增加 `class="help-block"` 的 `span` 标签或 `p` 标签。
+
+### 13. 使用 Bootstrap 激活或禁用按钮要如何操作？
+
+- 激活按钮：给按钮增加 `.active` 的 `class`
+- 禁用按钮：给按钮增加 `disabled="disabled"` 的属性
+
+### 14. Bootstrap 有哪些关于图片的class？
+
+- （1）`.img-rounded` 为图片添加圆角
+- （2）`.img-circle` 将图片变为圆形
+- （3）`.img-thumbnail` 缩略图功能
+- （4）`.img-responsive` 图片响应式 (将很好地扩展到父元素)
+
+### 15. Bootstrap 中有关元素浮动及清除浮动的 class？
+
+- （1）`class="pull-left"` 元素浮动到左边
+- （2）`class="pull-right"` 元素浮动到右边
+- （3）`class="clearfix"` 清除浮动
+
+### 16. 除了屏幕阅读器外，其他设备上隐藏元素的 class？
+
+> `class="sr-only"`
+
+### 17. Bootstrap 如何制作下拉菜单？
+
+- （1）将下拉菜单包裹在 `class="dropdown"` 的 `<div>` 中；
+- （2）在触发下拉菜单的按钮中添加：`class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown"`
+- （3）在包裹下拉菜单的 ul 中添加：`class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"`
+- （4）在下拉菜单的列表项中添加：`role="presentation"`。其中，下拉菜单的标题要添加`class="dropdown-header"`，选项部分要添加 `tabindex="-1"`。
+
+### 18. Bootstrap 如何制作按钮组？以及水平按钮组和垂直按钮组的优先级？
+
+- （1）用 `class="btn-group"` 的 `<div>` 去包裹按钮组；`class="btn-group-vertical"` 可设置垂直按钮组。
+- （2）`btn-group` 的优先级高于 `btn-group-vertical` 的优先级。
+
+### 19. Bootstrap 如何设置按钮的下拉菜单？
+
+> 在一个  `.btn-group` 中放置按钮和下拉菜单即可。
+
+### 20. Bootstrap 中的输入框组如何制作？
+
+- （1）把前缀或者后缀元素放在一个带有 `class="input-group"`中的 `<div>` 中
+- （2）在该 `<div>` 内，在 `class="input-group-addon"` 的 `<span>` 里面放置额外的内容；
+- （3）把 `<span>` 放在 `<input>` 元素的前面或后面。
+
+### 21. Bootstrap 中的导航都有哪些？
+
+- （1）导航元素：有 `class="nav nav-tabs"` 的标签页导航，还有 `class="nav nav-pills"` 的胶囊式标签页导航；
+- （2）导航栏：`class="navbar navbar-default" role="navigation"`；
+- （3）面包屑导航：`class="breadcrumb"`
+
+### 22. Bootstrap 中设置分页的 class？
+
+- 默认的分页：`class="pagination"`
+- 默认的翻页：`class="pager"`
+
+### 23. Bootstrap 中显示标签的 class？
+
+> `class="label"`
+
+### 24. Bootstrap 中如何制作徽章？
+
+> `<span class="badge">26</span>`
+
+### 25. Bootstrap 中超大屏幕的作用是什么？
+
+> 设置 `class="jumbotron"` 可以制作超大屏幕，该组件可以增加标题的大小并增加更多的外边距
+
+<br>
+
+## 六、微信小程序
+
+### 1. 微信小程序有几个文件
+
+- `WXSS (WeiXin Style Sheets)` 是一套样式语言，用于描述 `WXML` 的组件样式， `js` 逻辑处理，网络请求 `json` 小程序设置，如页面注册，页面标题及 `tabBar`。
+- `app.json` 必须要有这个文件，如果没有这个文件，项目无法运行，因为微信框架把这个作为配置文件入口，整个小程序的全局配置。包括页面注册，网络设置，以及小程序的 `window` 背景色，配置导航条样式，配置默认标题。
+- `app.js` 必须要有这个文件，没有也是会报错！但是这个文件创建一下就行，什么都不需要写以后我们可以在这个文件中监听并处理小程序的生命周期函数、声明全局变量。
+- `app.wxss` 配置全局 `css`
+
+### 2. 微信小程序怎样跟事件传值
+
+> 给 `HTML` 元素添加 `data-*` 属性来传递我们需要的值，然后通过 `e.currentTarget.dataset` 或 `onload` 的 `param` 参数获取。但 `data -` 名称不能有大写字母和不可以存放对象
+
+### 3. 小程序的 wxss 和 css 有哪些不一样的地方？
+
+- `wxss` 的图片引入需使用外链地址
+- 没有 `Body`；样式可直接使用 `@import` 导入
+
+### 4. 小程序关联微信公众号如何确定用户的唯一性
+
+> 使用 `wx.getUserInfo` 方法 `withCredentials` 为 `true` 时可获取 `encryptedData`，里面有 `union_id`。后端需要进行对称解密
+
+### 5 微信小程序与 vue 区别
+
+- 生命周期不一样，微信小程序生命周期比较简单。
+- 数据绑定也不同，微信小程序数据绑定需要使用 `{{}}`，`vue` 直接 `:` 就可以。
+- 显示与隐藏元素，`vue` 中，使用 `v-if` 和 `v-show` 控制元素的显示和隐藏，小程序中，使用 `wx-if` 和 `hidden` 控制元素的显示和隐藏。
+- 事件处理不同，小程序中，全用 `bindtap(bind+event)`，或者 `catchtap(catch+event)` 绑定事件,`vue`使用 `v-on:event` 绑定事件，或者使用 `@event` 绑定事件。
+- 数据双向绑定也不一样，在 `vue` 中只需要在表单元素上加上 `v-model`，然后再绑定 `data` 中对应的一个值，当表单元素内容发生变化时，`data` 中对应的值也会相应改变，这是 `vue` 非常 nice 的一点。微信小程序必须获取到表单元素改变的值，然后再把值赋给一个 `data` 中声明的变量。
+
+<br>
+
+## 七、webpack
+
+### 1. 打包体积 优化思路
+
+- 提取第三方库或通过引用外部文件的方式引入第三方库
+- 代码压缩插件 `UglifyJsPlugin`
+- 服务器启用 gzip 压缩
+- 按需加载资源文件 `require.ensure`
+- 优化 `devtool` 中的 `source-map`
+- 剥离 `css` 文件，单独打包
+- 去除不必要插件，通常就是开发环境与生产环境用同一套配置文件导致
+
+### 2. 打包效率
+
+- 开发环境采用增量构建，启用热更新
+- 开发环境不做无意义的工作如提取 `css` 计算文件 hash 等
+- 配置 `devtool`
+- 选择合适的 `loader`
+- 个别 `loader` 开启 `cache` 如 `babel-loader`
+- 第三方库采用引入方式
+- 提取公共代码
+- 优化构建时的搜索路径，指明需要构建目录及不需要构建目录
+- 模块化引入需要的部分
+
+### 3. Loader
+
+编写一个loader
+
+> `loader`就是一个 `node` 模块，它输出了一个函数。当某种资源需要用这个 `loader` 转换时，这个函数会被调用。并且，这个函数可以通过提供给它的 `this` 上下文访问 `Loader API`。 `reverse-txt-loader`
+
+``` js
+// 定义
+module.exports = function (src) {
+    // src是原文件内容（abcde），下面对内容进行处理，这里是反转
+    var result = src.split('').reverse().join('');
+    // 返回JavaScript源码，必须是String或者Buffer
+    return `module.exports = '${result}'`;
+}
+// 使用
+{
+    test: /\.txt$/,
+    use: [
+        {
+            './path/reverse-txt-loader'
+        }
+    ]
+},
+```
+
+<br>
+
+### 4. 说一下 webpack 的一些 plugin，怎么使用 webpack 对项目进行优化
+
+**构建优化**
+
+- 减少编译体积 `ContextReplacementPugin`、`IgnorePlugin`、`babel-plugin-import`、`babel-plugin-transform-runtime`
+- 并行编译 `happypack`、`thread-loader`、`uglifyjsWebpackPlugin` 开启并行
+- 缓存 `cache-loader`、`hard-source-webpack-plugin`、`uglifyjsWebpackPlugin` 开启缓存、`babel-loader` 开启缓存
+- 预编译 `dllWebpackPlugin && DllReferencePlugin`、`auto-dll-webapck-plugin`
+
+**性能优化**
+
+- 减少编译体积 `Tree-shaking`、`Scope Hositing`
+- `hash` 缓存 `webpack-md5-plugin`
+- 拆包 `splitChunksPlugin`、`import()`、`require.ensure`
+
+
 

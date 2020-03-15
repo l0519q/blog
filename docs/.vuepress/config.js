@@ -31,13 +31,13 @@ module.exports = {
                 text: '面试题',
                 items: [
                     { text: '基础', link: '/interview/basics/' },
-                    // { text: '进阶', link: '/interview/promotion/' }
+                    { text: '进阶', link: '/interview/promotion/' }
                 ]
             }
         ],
         sidebar: 'auto',
-        lastUpdated: '上次更新时间',
-        smoothScroll: true
+        smoothScroll: true,
+        lastUpdated: '上次更新时间'
     },
     plugins: ['@vuepress/back-to-top']
 }
